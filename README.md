@@ -20,7 +20,7 @@ In the class that you want to localize require the library and define the string
 
  ```js
 \\ES6 module syntax
-import LocalizedStrings from 'react-localization';
+import LocalizedStrings from 'localized-strings';
 
 let strings = new LocalizedStrings({
   en:{
@@ -47,7 +47,31 @@ console.log ("HOW: " + strings.how);
 ## Custom getInterfaceLanguage method
 
 You can pass a custom method to get the current interface based on the context.
+
 The default method check the browser language but it could be replaced with other check if you are in a Server, ReactNative or Nativescript project.
+
+The getInterfaceLanguage method can be as simple as:
+
+```js
+ function getCustomInterfaceLanguage(){
+   return "it-IT";
+ }
+ 
+ let strings = new LocalizedStrings({
+  en:{
+    how:"How do you want your egg today?",
+    boiledEgg:"Boiled egg",
+    softBoiledEgg:"Soft-boiled egg",
+    choice:"How to choose the egg"
+  },
+  it: {
+    how:"Come vuoi il tuo uovo oggi?",
+    boiledEgg:"Uovo sodo",
+    softBoiledEgg:"Uovo alla coque",
+    choice:"Come scegliere l'uovo"
+  }
+}, getCustomInterfaceLanguage)
+```
 
 ## API
 
