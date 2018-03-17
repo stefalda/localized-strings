@@ -20,8 +20,9 @@ declare module 'localized-strings' {
 
     export type LocalizedStrings<T> = LocalizedStringsMethods & T;
   
+    
     interface LocalizedStringsFactory {
-        new <T>(props: GlobalStrings<T>, getInterfaceLanguage:GetInterfaceLanguageCallback=null): LocalizedStrings<T>;
+        new <T>(props: GlobalStrings<T>, getInterfaceLanguage?:GetInterfaceLanguageCallback): LocalizedStrings<T>;
     }
   
     var LocalizedStrings: LocalizedStringsFactory;
