@@ -176,7 +176,10 @@ describe('use a custom getInterfaceLanguageMethod', () => {
     it:{
       language:"italian"
     }}, ()=>'it-IT');
-    it('Use the default method that returns en-US', () => {
+    it('Use the custom method that returns it_IT', () => {
       expect (strings.language).toBe("italian");
     });
+    it('Use the custom interface methods when checking the getInterfaceLanguage', ()=>{
+      expect (strings.getInterfaceLanguage()).toBe("it-IT");
+    })
 });

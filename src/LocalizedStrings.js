@@ -136,7 +136,9 @@ export default class LocalizedStrings {
         return this._interfaceLanguage;
     }
 
-    //Return an array containing the available languages passed as props in the constructor
+    /**
+     * Return an array containing the available languages passed as props in the constructor
+     */ 
     getAvailableLanguages() {
         if (!this._availableLanguages) {
             this._availableLanguages = [];
