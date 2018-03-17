@@ -1,4 +1,4 @@
-# react-localization
+# localized-strings
 Simple module to localize the strings of any JS based program using the same syntax used in the 
 [ReactLocalization module](https://github.com/stefalda/react-localization/) and
 [ReactNativeLocalization module](https://github.com/stefalda/ReactNativeLocalization/) libraries.
@@ -11,7 +11,7 @@ It's possible to force a language different from the interface one.
 
 It's possible to configure the library to use a specific routine that return the interface language, so it's possible to extend it in any possible environment.
 
-##Installation
+## Installation
 `npm install --save localized-strings`
 
 ## Usage
@@ -41,9 +41,7 @@ let strings = new LocalizedStrings({
 Then use the `strings` object literal directly in the render method accessing the key of the localized string.
 
 ```js
-<Text style={styles.title}>
-  {strings.how}
-</Text>
+console.log ("HOW: " + strings.how);
 ```
 
 ## API
