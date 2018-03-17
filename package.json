@@ -14,7 +14,8 @@
   "keywords": [
     "localization",
     "internationalization",
-    "string localization"
+    "string localization",
+    "nativescript"
   ],
   "main": "./lib/LocalizedStrings.js",
   "types": "./lib/LocalizedStrings.d.ts",
