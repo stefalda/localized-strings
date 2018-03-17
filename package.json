@@ -1,0 +1,33 @@
+{
+  "name": "localized-strings",
+  "version": "0.0.1",
+  "description": "Simple module to localize the strings of any JS based program using the same syntax used in the ReactLocalization and ReactNativeLocalization module, use 'npm run build' before publishing",
+  "scripts": {
+    "babel-version": "babel --version",
+    "test": "jasmine",
+    "build": "babel src --out-dir lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stefalda/localized-strings.git"
+  },
+  "keywords": [
+    "localization",
+    "internationalization",
+    "string localization"
+  ],
+  "main": "./lib/LocalizedStrings.js",
+  "types": "./lib/LocalizedStrings.d.ts",
+  "author": "Stefano Falda <stefano.falda@gmail.com> (http://www.babisoft.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/stefalda/localized-strings/issues"
+  },
+  "homepage": "https://github.com/stefalda/localized-strings#readme",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "jasmine": "^3.1.0"
+  },
+  "dependencies": {}
+}
