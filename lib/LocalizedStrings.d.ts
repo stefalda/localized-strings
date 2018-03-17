@@ -8,7 +8,7 @@ declare module 'localized-strings' {
     
     type GetInterfaceLanguageCallback = () => string;
 
-    interface LocalizedStringsMethods {
+    export interface LocalizedStringsMethods {
         setLanguage(language: string): void;
         getLanguage(): string;
         getInterfaceLanguage(): string;
