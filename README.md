@@ -44,6 +44,11 @@ Then use the `strings` object literal directly in the render method accessing th
 console.log ("HOW: " + strings.how);
 ```
 
+## Custom getInterfaceLanguage method
+
+You can pass a custom method to get the current interface based on the context.
+The default method check the browser language but it could be replaced with other check if you are in a Server, ReactNative or Nativescript project.
+
 ## API
 
 * setLanguage(languageCode) - to force manually a particular language
