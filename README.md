@@ -48,7 +48,7 @@ console.log ("HOW: " + strings.how);
 
 You can pass a custom method to get the current interface based on the context.
 
-The default method check the browser language but it could be replaced with other check if you are in a Server, ReactNative or Nativescript project.
+The default method check the browser language but it could be replaced with other check if you are in a Server, ReactNative or [Nativescript](https://www.nativescript.org) project.
 
 The getInterfaceLanguage method can be as simple as:
 
@@ -73,6 +73,24 @@ The getInterfaceLanguage method can be as simple as:
 }, getCustomInterfaceLanguage)
 ```
 
+### Nativescript example
+This is how you can use the library in a [Nativescript](https://www.nativescript.org) project
+```js
+const platform = require("platform");
+this.strings = new LocalizedStrings({
+            it: {
+                score: "Punti",
+                time: "Tempo"
+            },
+            en: {
+                score: "Score",
+                time: "Time"
+            }
+        }, () => {
+            return platform.device.language;
+        }
+        );
+```
 ## API
 
 * setLanguage(languageCode) - to force manually a particular language
