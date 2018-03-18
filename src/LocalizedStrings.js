@@ -190,4 +190,11 @@ export default class LocalizedStrings {
         }
         return null;
     }
+
+     /**
+      * The current props (locale object)
+      */ 
+     getContent() {
+        return this._props;
+    }
 }

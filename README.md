@@ -44,6 +44,39 @@ Then use the `strings` object literal directly in the render method accessing th
 console.log ("HOW: " + strings.how);
 ```
 
+The first language is considered the default one, so if a translation is missing for the selected language, the default one is shown and a line is written to the log as a reminder.
+
+#### Update / Overwrite Locale
+
+You might have default localized in the build but then download the latest localization strings from a server. Use setContent to overwrite the whole object. 
+
+**NOTE** that this will remove all other localizations if used.
+
+```js
+strings.setContent({
+  en:{
+    how:"How do you want your egg todajsie?",
+    boiledEgg:"Boiled eggsie",
+    softBoiledEgg:"Soft-boiled egg",
+    choice:"How to choose the egg"
+  }
+})
+```
+
+You can also only overwrite a specific language using:
+
+```js
+strings.setContent(Object.assign({},strings.getContent(),
+{
+  en:{
+    how:"How do you want your egg todajsie?",
+    boiledEgg:"Boiled eggsie",
+    softBoiledEgg:"Soft-boiled egg",
+    choice:"How to choose the egg"
+  }
+}));
+```
+
 ## Custom getInterfaceLanguage method
 
 You can pass a custom method to get the current interface based on the context.

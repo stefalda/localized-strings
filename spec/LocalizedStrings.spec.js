@@ -1,4 +1,4 @@
-import LocalizedStrings from '../src/LocalizedStrings';
+import LocalizedStrings from '../lib/LocalizedStrings';
 
 describe('Main Library Functions', function () {
   global.navigator = {};
@@ -117,7 +117,7 @@ describe('Main Library Functions', function () {
     expect(strings.hello).toEqual('bonjour');
   });
 
-  it('Switch to different props not working', function () {
+  it('Switch to different props with nested objects', function () {
     strings = new LocalizedStrings({
           en: {
             a: {
@@ -136,6 +136,31 @@ describe('Main Library Functions', function () {
     });
     strings.setLanguage("en");
     expect(strings.a.b.x).toEqual('a.b.x');
+  });
+
+  it('Should allow replacing a single language with the setContent method', function(){
+    strings = new LocalizedStrings({
+      en:{
+        how:"How do you want your egg today?",
+        boiledEgg:"Boiled egg",
+      },
+      it: {
+        how:"Come vuoi il tuo uovo oggi?",
+        boiledEgg:"Uovo bollito",
+      }
+    });
+    
+    strings.setContent(Object.assign({},strings.getContent(),
+      {
+        en:{
+          how:"How do you want your egg todajsie?",
+          boiledEgg:"Boiled eggsie",
+          }
+      }));
+
+     expect(strings.how).toEqual('How do you want your egg todajsie?'); 
+     strings.setLanguage('it');
+     expect(strings.how).toEqual('Come vuoi il tuo uovo oggi?'); 
   });
 
   it('Handles named tokens as part of the format string', () => {
