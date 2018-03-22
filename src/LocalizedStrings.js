@@ -62,7 +62,7 @@ export default class LocalizedStrings {
         this._props = props;
         utils.validateTranslationKeys(Object.keys(props[this._defaultLanguage]));
         //Store first level keys (for identifying missing translations)
-        for (var key in this._props[this._defaultLanguage]) {
+        for (let key in this._props[this._defaultLanguage]) {
                 if (typeof this._props[this._defaultLanguage][key]=="string") {
                     this._defaultLanguageFirstLevelKeys.push(key);
                 }
@@ -79,17 +79,17 @@ export default class LocalizedStrings {
     setLanguage(language) {
         //Check if exists a translation for the current language or if the default
         //should be used
-        var bestLanguage = this._getBestMatchingLanguage(language, this._props);
-        var defaultLanguage = Object.keys(this._props)[0];
+        const bestLanguage = this._getBestMatchingLanguage(language, this._props);
+        const defaultLanguage = Object.keys(this._props)[0];
         this._language = bestLanguage;
         //Associate the language object to the this object
         if (this._props[bestLanguage]) {
             //delete default propery values to identify missing translations
-            for (key of this._defaultLanguageFirstLevelKeys){
-                delete this[key];
+            for (let i=0; i< this._defaultLanguageFirstLevelKeys.length;i++){
+                delete this[this._defaultLanguageFirstLevelKeys[i]];
             }
-            var localizedStrings = Object.assign({}, this._props[this._language]);
-            for (var key in localizedStrings) {
+            let localizedStrings = Object.assign({}, this._props[this._language]);
+            for (let key in localizedStrings) {
                 if (localizedStrings.hasOwnProperty(key)) {
                     this[key] = localizedStrings[key];
                 }
@@ -108,7 +108,7 @@ export default class LocalizedStrings {
      * @param {*} strings 
      */
     _fallbackValues(defaultStrings, strings) {
-        for (var key in defaultStrings) {
+        for (let key in defaultStrings) {
             if (defaultStrings.hasOwnProperty(key) && !strings[key]) {
                 strings[key] = defaultStrings[key];
                 console.log(`🚧 👷 key '${key}' not found in localizedStrings for language ${this._language} 🚧`);
