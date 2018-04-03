@@ -178,7 +178,7 @@ export default class LocalizedStrings {
                     return valueForPlaceholder;
                 }
                 return textPart;
-            });
+            }).join('');
     }
 
     //Return a string with the passed key in a different language

@@ -62,7 +62,7 @@ describe('Main Library Functions', function () {
   });
   it('Format string in default language', function () {
     expect(strings.formatString(strings.formattedValue, "cake", "ice-cream"))
-      .toEqual(["I'd like some ", "cake", " and ", "ice-cream", ", or just ", "cake"]);
+      .toEqual("I'd like some cake and ice-cream, or just cake");
   });
 
   //Switch language
@@ -93,7 +93,7 @@ describe('Main Library Functions', function () {
   it('Format string in other language', function () {
     strings.setLanguage("it");
     expect(strings.formatString(strings.formattedValue, "torta", "gelato"))
-      .toEqual(["Vorrei un po' di ", "torta", " e ", "gelato", ", o solo ", "torta"]);
+      .toEqual("Vorrei un po' di torta e gelato, o solo torta");
   });
 
   it('Get string in a different language', function () {
@@ -170,12 +170,14 @@ describe('Main Library Functions', function () {
       year: "2018"
     };
     expect(strings.formatString(strings.currentDate, formatTokens))
-      .toEqual(["The current date is ", "January", " ", "12", ", ", "2018", "!"]);
+      .toEqual("The current date is January 12, 2018!");
   });
 
   it('Handles falsy values', () => {
+    //falsy: "{0} {1} {2} {3} {4} {5}"
+    console.log(`#${strings.formatString(strings.falsy, 0, false, '', null, undefined, NaN)}#`)
     expect(strings.formatString(strings.falsy, 0, false, '', null, undefined, NaN))
-      .toEqual([0, " ", false, " ", '', " ", null, " ", undefined, " ", NaN]);
+      .toEqual([0, false, '', null, undefined, NaN].join(' '));
   });
 
 });
