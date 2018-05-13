@@ -149,7 +149,7 @@ describe('Main Library Functions', function () {
         boiledEgg:"Uovo bollito",
       }
     });
-    
+
     strings.setContent(Object.assign({},strings.getContent(),
       {
         en:{
@@ -158,9 +158,9 @@ describe('Main Library Functions', function () {
           }
       }));
 
-     expect(strings.how).toEqual('How do you want your egg todajsie?'); 
+     expect(strings.how).toEqual('How do you want your egg todajsie?');
      strings.setLanguage('it');
-     expect(strings.how).toEqual('Come vuoi il tuo uovo oggi?'); 
+     expect(strings.how).toEqual('Come vuoi il tuo uovo oggi?');
   });
 
   it('Handles named tokens as part of the format string', () => {
@@ -175,9 +175,13 @@ describe('Main Library Functions', function () {
 
   it('Handles falsy values', () => {
     //falsy: "{0} {1} {2} {3} {4} {5}"
-    console.log(`#${strings.formatString(strings.falsy, 0, false, '', null, undefined, NaN)}#`)
     expect(strings.formatString(strings.falsy, 0, false, '', null, undefined, NaN))
       .toEqual([0, false, '', null, undefined, NaN].join(' '));
+  });
+
+  it('Handles empty values', () => {
+    expect(strings.formatString(strings.thisKeyDoesNotExist, { thisReplacement: 'doesNotExist'}))
+      .toEqual('');
   });
 
 });
@@ -191,7 +195,7 @@ describe('use the default getInterfaceLanguageMethod', () => {
       language:"italian"
     }});
     it('Use the default method that returns en-US', () => {
-      expect (strings.language).toBe("english");
+      expect(strings.language).toBe("english");
     });
 });
 
