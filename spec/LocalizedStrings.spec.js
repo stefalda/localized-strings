@@ -20,7 +20,8 @@ describe('Main Library Functions', function () {
         },
         missing:"missing value",
         currentDate: "The current date is {month} {day}, {year}!",
-        falsy: "{0} {1} {2} {3} {4} {5}"
+        falsy: "{0} {1} {2} {3} {4} {5}",
+        empty: ""
       },
       it: {
         language: "italian",
@@ -34,7 +35,8 @@ describe('Main Library Functions', function () {
         },
         formattedValue:"Vorrei un po' di {0} e {1}, o solo {0}",
         currentDate: "La data corrente è {month} {day}, {year}!",
-        falsy: "{0} {1} {2} {3} {4} {5}"
+        falsy: "{0} {1} {2} {3} {4} {5}",
+        empty: ""
       }
     });
   });
@@ -182,6 +184,10 @@ describe('Main Library Functions', function () {
   it('Handles empty values', () => {
     expect(strings.formatString(strings.thisKeyDoesNotExist, { thisReplacement: 'doesNotExist'}))
       .toEqual('');
+  });
+
+  it('Handles empty strings', () => {
+    expect(strings.empty).toEqual('')
   });
 
 });

@@ -109,7 +109,7 @@ export default class LocalizedStrings {
      */
     _fallbackValues(defaultStrings, strings) {
         for (let key in defaultStrings) {
-            if (defaultStrings.hasOwnProperty(key) && !strings[key]) {
+            if (defaultStrings.hasOwnProperty(key) && !strings[key] && strings[key] !== '') {
                 strings[key] = defaultStrings[key];
                 console.log(`🚧 👷 key '${key}' not found in localizedStrings for language ${this._language} 🚧`);
             } else {
