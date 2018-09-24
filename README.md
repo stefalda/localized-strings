@@ -23,6 +23,8 @@ In the class that you want to localize require the library and define the string
 ```js
 \\ES6 module syntax
 import LocalizedStrings from 'localized-strings';
+\\CommonJS module syntax
+const LocalizedStrings = require('LocalizedStrings').default;
 
 let strings = new LocalizedStrings({
  en:{
@@ -164,10 +166,8 @@ this.strings = new LocalizedStrings(
 
 ```js
   en:{
-    bread:"bread",
-    butter:"butter",
     question:"I'd like {0} and {1}, or just {0}",
-    questionWithReferences:"I'd like $ref{bread} and $ref{butter}, or just $ref{bread}",
+    questionWithReferences:"I'd like $ref{fridge.bread} and $ref{fridge.butter}, or just $ref{fridge.bread}",
     ...
     login: 'login',
     onlyForMembers: 'You have to {0} in order to use our app',
@@ -175,11 +175,20 @@ this.strings = new LocalizedStrings(
     iAmText: 'I am {0} text',
     ...
     january: 'January',
-    currentDate: 'The current date is {month} {day}, {year}!'
+    currentDate: 'The current date is {month} {day}, {year}!',
+    fridge: {
+      milk: 'milk',
+      eggs: 'eggs',
+      bread: 'bread',
+      butter: 'butter'
+    }
   }
   ...
   // Will output: I'd like bread and butter, or just bread
-  strings.formatString(strings.question, strings.bread, strings.butter)
+  strings.formatString(strings.question, strings.fridge.bread, strings.fridge.butter)
+
+  // Will output: I'd like bread and butter, or just bread
+  strings.formatString(strings.question, strings.fridge)
 
   // Will output: I'd like bread and butter, or just bread
   strings.formatString(strings.questionWithReferences)
@@ -191,6 +200,9 @@ this.strings = new LocalizedStrings(
     day: 12,
     year: 2018
   })
+
+  // Possible to use formatString with dot-notation, this is same as .getString and will not crash the application if the key isn't found.
+  strings.formatString('fridge.missing.subnode')
 ```
 
 **Beware: do not define a string key as formatString!**

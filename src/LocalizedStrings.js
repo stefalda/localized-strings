@@ -145,7 +145,11 @@ export default class LocalizedStrings {
   // eg. 1: strings.formatString(strings.question, strings.bread, strings.butter)
   // eg. 2: strings.formatString(strings.question, { bread: strings.bread, butter: strings.butter })
   formatString(str, ...valuesForPlaceholders) {
-    const ref = (str || '')
+    let input = str || '';
+    if (typeof input === 'string') {
+      input = this.getString(str, null, true) || input;
+    }
+    const ref = input
       .split(placeholderReferenceRegex)
       .filter(textPart => !!textPart)
       .map((textPart) => {
@@ -169,10 +173,9 @@ export default class LocalizedStrings {
         if (textPart.match(placeholderReplaceRegex)) {
           const matchedKey = textPart.slice(1, -1);
           let valueForPlaceholder = valuesForPlaceholders[matchedKey];
-
           // If no value found, check if working with an object instead
           if (valueForPlaceholder === undefined) {
-            const valueFromObjectPlaceholder = valuesForPlaceholders[0][matchedKey];
+            const valueFromObjectPlaceholder =              valuesForPlaceholders[0][matchedKey];
             if (valueFromObjectPlaceholder !== undefined) {
               valueForPlaceholder = valueFromObjectPlaceholder;
             } else {
@@ -190,7 +193,7 @@ export default class LocalizedStrings {
 
   // Return a string with the passed key in a different language or defalt if not set
   // We allow deep . notation for finding strings
-  getString(key, language) {
+  getString(key, language, omitWarning = false) {
     try {
       let current = this._props[language || this._language];
       const paths = key.split('.');
@@ -202,11 +205,13 @@ export default class LocalizedStrings {
       }
       return current;
     } catch (ex) {
-      console.log(
-        `No localization found for key '${key}' and language '${language}', failed on ${
-          ex.message
-        }`,
-      );
+      if (!omitWarning) {
+        console.log(
+          `No localization found for key '${key}' and language '${language}', failed on ${
+            ex.message
+          }`,
+        );
+      }
     }
     return null;
   }
