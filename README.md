@@ -158,7 +158,7 @@ this.strings = new LocalizedStrings(
 
 - setLanguage(languageCode) - to force manually a particular language
 - getLanguage() - to get the current displayed language
-- getInterfaceLanguage() - to get the current device interface language
+- getInterfaceLanguage() - to get the current device interface language (from Navigation.language in browsers, BCP-47, https://developer.mozilla.org/en-US/docs/Web/API/NavigatorLanguage/language)
 - getValue(path) - get value from string path, returns error instead of throws exception as with . notation
 - formatString() - to format the passed string replacing its placeholders {n} with the other arguments strings. Can also be used with $ref{id} to reference another string
 
