@@ -6,8 +6,6 @@ declare module "localized-strings" {
     [language: string]: T;
   }
 
-  type GetInterfaceLanguageCallback = () => string;
-
   export interface LocalizedStringsMethods {
     /**
      * Can be used from ouside the class to force a particular language
@@ -64,6 +62,8 @@ declare module "localized-strings" {
 
   export type LocalizedStrings<T> = LocalizedStringsMethods & T;
 
+  type GetInterfaceLanguageCallback = () => string;
+
   interface Options {
     customLanguageInterface?: GetInterfaceLanguageCallback;
     logsEnabled?: boolean;
@@ -72,7 +72,7 @@ declare module "localized-strings" {
   }
 
   interface LocalizedStringsFactory {
-    new <T>(props: GlobalStrings<T>, oprions?: Options): LocalizedStrings<T>;
+    new <T>(props: GlobalStrings<T>, options?: Options): LocalizedStrings<T>;
   }
 
   const LocalizedStrings: LocalizedStringsFactory;
