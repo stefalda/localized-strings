@@ -27,27 +27,28 @@ import LocalizedStrings from 'localized-strings';
 const LocalizedStrings = require('LocalizedStrings').default;
 
 let strings = new LocalizedStrings({
- en:{
-   how:"How do you want your egg today?",
-   boiledEgg:"Boiled egg",
-   softBoiledEgg:"Soft-boiled egg",
-   choice:"How to choose the egg",
-   fridge: {
-     egg: "Egg",
-     milk: "Milk",
-   }
- },
- it: {
-   how:"Come vuoi il tuo uovo oggi?",
-   boiledEgg:"Uovo sodo",
-   softBoiledEgg:"Uovo alla coque",
-   choice:"Come scegliere l'uovo",
-   fridge: {
-     egg: "Uovo",
-     milk: "Latte",
-   }
- }
-});
+  en:{
+    how:"How do you want your egg today?",
+    boiledEgg:"Boiled egg",
+    softBoiledEgg:"Soft-boiled egg",
+    choice:"How to choose the egg",
+    fridge: {
+      egg: "Egg",
+      milk: "Milk",
+    }
+  },
+  it: {
+    how:"Come vuoi il tuo uovo oggi?",
+    boiledEgg:"Uovo sodo",
+    softBoiledEgg:"Uovo alla coque",
+    choice:"Come scegliere l'uovo",
+    fridge: {
+      egg: "Uovo",
+      milk: "Latte",
+    }
+  }},
+    {/* options */}
+);
 ```
 
 Then use the `strings` object literal directly in the render method accessing the key of the localized string.
@@ -129,7 +130,9 @@ let strings = new LocalizedStrings(
       choice: "Come scegliere l'uovo"
     }
   },
-  getCustomInterfaceLanguage
+  {
+    customLanguageInterface: getCustomInterfaceLanguage
+  }
 );
 ```
 
@@ -141,22 +144,61 @@ This is how you can use the library in a [Nativescript](https://www.nativescript
 const platform = require("platform");
 this.strings = new LocalizedStrings(
   {
-    it: {
-      score: "Punti",
-      time: "Tempo"
-    },
     en: {
       score: "Score",
       time: "Time"
     }
   },
-  () => {
-    return platform.device.language;
+  {
+    customLanguageInterface: () => {
+      return platform.device.language;
+    }
   }
 );
 ```
 
+## Psuedo Helper
+
+Sometimes you have already a lot of text string in your project and starts to implement a language component. Using Psuedo during this phase can help to speed up finding what is done and not.
+
+In constructor you can enable
+
+```js
+pseudo: true;
+```
+
+This will turn a string as 'hello you' to '[qxjE2gx qtBy]'. This will help you quickly to see what strings are not using the localized-strings component. The randomized characters are wrapped in [ ]. These are to help you view the bounds of the string, so if they arent visible it might be outside the viewing area.
+
+### Multiple Languages
+
+If you are about to implement multiple languages you can enable
+
+```js
+pseudoMultipleLanguages: true;
+```
+
+This will make all strings about 40% longer.
+
 ## API
+
+- constructor(languageObject,options)
+
+```js
+  options
+  {
+    // custom function that returns device language
+    // @see 'Custom getInterfaceLanguage method' for more info
+    customLanguageInterface: () => return 'it-IT'
+    // Output issues finding strings and references
+    logsEnabled: true
+    // Helper for finding string that is implemented
+    // @see Pseudo Helper for more info
+    pseudo: false
+    // Helper for preparing multiple langauges
+    // @see Pseudo Helper for more info
+    pseudoMultipleLanguages: false
+  }
+```
 
 - setLanguage(languageCode) - to force manually a particular language
 - getLanguage() - to get the current displayed language
@@ -168,12 +210,6 @@ this.strings = new LocalizedStrings(
   en:{
     question:"I'd like {0} and {1}, or just {0}",
     questionWithReferences:"I'd like $ref{fridge.bread} and $ref{fridge.butter}, or just $ref{fridge.bread}",
-    ...
-    login: 'login',
-    onlyForMembers: 'You have to {0} in order to use our app',
-    bold: 'bold',
-    iAmText: 'I am {0} text',
-    ...
     january: 'January',
     currentDate: 'The current date is {month} {day}, {year}!',
     fridge: {

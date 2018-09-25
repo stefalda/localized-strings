@@ -8,42 +8,45 @@ describe('Main Library Functions', () => {
   let strings;
 
   beforeEach(() => {
-    strings = new LocalizedStrings({
-      en: {
-        language: 'english',
-        how: 'How do you want your egg today?',
-        boiledEgg: 'Boiled egg',
-        softBoiledEgg: 'Soft-boiled egg',
-        choice: 'How to choose the egg',
-        formattedValue: "I'd like some {0} and {1}, or just {0}",
-        ratings: {
-          excellent: 'excellent',
-          good: 'good',
-          missingComplex: 'missing value',
+    strings = new LocalizedStrings(
+      {
+        en: {
+          language: 'english',
+          how: 'How do you want your egg today?',
+          boiledEgg: 'Boiled egg',
+          softBoiledEgg: 'Soft-boiled egg',
+          choice: 'How to choose the egg',
+          formattedValue: "I'd like some {0} and {1}, or just {0}",
+          ratings: {
+            excellent: 'excellent',
+            good: 'good',
+            missingComplex: 'missing value',
+          },
+          missing: 'missing value',
+          currentDate: 'The current date is {month} {day}, {year}!',
+          falsy: '{0} {1} {2} {3} {4} {5}',
+          empty: '',
+          reference: '$ref{ratings.excellent}',
+          referenceAdvanced: '$ref{falsy}',
         },
-        missing: 'missing value',
-        currentDate: 'The current date is {month} {day}, {year}!',
-        falsy: '{0} {1} {2} {3} {4} {5}',
-        empty: '',
-        reference: '$ref{ratings.excellent}',
-        referenceAdvanced: '$ref{falsy}',
-      },
-      it: {
-        language: 'italian',
-        how: 'Come vuoi il tuo uovo oggi?',
-        boiledEgg: 'Uovo sodo',
-        softBoiledEgg: 'Uovo alla coque',
-        choice: "Come scegliere l'uovo",
-        ratings: {
-          excellent: 'eccellente',
-          good: 'buono',
+        it: {
+          language: 'italian',
+          how: 'Come vuoi il tuo uovo oggi?',
+          boiledEgg: 'Uovo sodo',
+          softBoiledEgg: 'Uovo alla coque',
+          choice: "Come scegliere l'uovo",
+          ratings: {
+            excellent: 'eccellente',
+            good: 'buono',
+          },
+          formattedValue: "Vorrei un po' di {0} e {1}, o solo {0}",
+          currentDate: 'La data corrente è {month} {day}, {year}!',
+          falsy: '{0} {1} {2} {3} {4} {5}',
+          empty: '',
         },
-        formattedValue: "Vorrei un po' di {0} e {1}, o solo {0}",
-        currentDate: 'La data corrente è {month} {day}, {year}!',
-        falsy: '{0} {1} {2} {3} {4} {5}',
-        empty: '',
       },
-    });
+      { logsEnabled: false },
+    );
   });
 
   it('Set default language to en', () => {
@@ -224,14 +227,17 @@ describe('Main Library Functions', () => {
 });
 
 describe('use the default getInterfaceLanguageMethod', () => {
-  const strings = new LocalizedStrings({
-    en: {
-      language: 'english',
+  const strings = new LocalizedStrings(
+    {
+      en: {
+        language: 'english',
+      },
+      it: {
+        language: 'italian',
+      },
     },
-    it: {
-      language: 'italian',
-    },
-  });
+    { logsEnabled: false },
+  );
   it('Use the default method that returns en-US', () => {
     expect(strings.language).toBe('english');
   });
@@ -247,12 +253,26 @@ describe('use a custom getInterfaceLanguageMethod', () => {
         language: 'italian',
       },
     },
-    () => 'it-IT',
+    { customLanguageInterface: () => 'it-IT', logsEnabled: false },
   );
   it('Use the custom method that returns it_IT', () => {
     expect(strings.language).toBe('italian');
   });
   it('Use the custom interface methods when checking the getInterfaceLanguage', () => {
     expect(strings.getInterfaceLanguage()).toBe('it-IT');
+  });
+});
+
+describe('use psuedo characters', () => {
+  const strings = new LocalizedStrings(
+    {
+      en: {
+        language: 'english',
+      },
+    },
+    { pseudo: true, logsEnabled: false },
+  );
+  it('Psuedo changed value', () => {
+    expect(strings.formatString('language')).not.toBe('english');
   });
 });
