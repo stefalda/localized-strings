@@ -78,6 +78,13 @@ export default class LocalizedStrings {
       if (typeof obj[property] === 'object') {
         this._pseudoAllValues(obj[property]);
       } else if (typeof obj[property] === 'string') {
+        if (
+          obj[property].indexOf('[') === 0
+          && obj[property].lastIndexOf(']') === obj[property].length - 1
+        ) {
+          // already psuedo fixed
+          return;
+        }
         // @TODO must be a way to get regex to find all replaceble strings except our replacement variables
         const strArr = obj[property].split(' ');
         for (let i = 0; i < strArr.length; i += 1) {
@@ -223,7 +230,7 @@ export default class LocalizedStrings {
           let valueForPlaceholder = valuesForPlaceholders[matchedKey];
           // If no value found, check if working with an object instead
           if (valueForPlaceholder === undefined) {
-            const valueFromObjectPlaceholder = valuesForPlaceholders[0][matchedKey];
+            const valueFromObjectPlaceholder =              valuesForPlaceholders[0][matchedKey];
             if (valueFromObjectPlaceholder !== undefined) {
               valueForPlaceholder = valueFromObjectPlaceholder;
             } else {
