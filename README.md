@@ -1,5 +1,6 @@
 # localized-strings
-Simple module to localize the strings of any JS based program using the same syntax used in the 
+
+Simple module to localize the strings of any JS based program using the same syntax used in the
 [ReactLocalization module](https://github.com/stefalda/react-localization/) and
 [ReactNativeLocalization module](https://github.com/stefalda/ReactNativeLocalization/) libraries.
 
@@ -12,69 +13,92 @@ It's possible to force a language different from the interface one.
 It's possible to configure the library to use a specific routine that return the interface language, so it's possible to extend it in any possible environment.
 
 ## Installation
+
 `npm install --save localized-strings`
 
 ## Usage
 
 In the class that you want to localize require the library and define the strings object passing to the constructor a simple object containing a language key (i.e. en, it, fr..) and then a list of key-value pairs with the needed localized strings.
 
- ```js
+```js
 \\ES6 module syntax
 import LocalizedStrings from 'localized-strings';
+\\CommonJS module syntax
+const LocalizedStrings = require('LocalizedStrings').default;
 
 let strings = new LocalizedStrings({
-  en:{
-    how:"How do you want your egg today?",
-    boiledEgg:"Boiled egg",
-    softBoiledEgg:"Soft-boiled egg",
-    choice:"How to choose the egg"
-  },
-  it: {
-    how:"Come vuoi il tuo uovo oggi?",
-    boiledEgg:"Uovo sodo",
-    softBoiledEgg:"Uovo alla coque",
-    choice:"Come scegliere l'uovo"
-  }
+ en:{
+   how:"How do you want your egg today?",
+   boiledEgg:"Boiled egg",
+   softBoiledEgg:"Soft-boiled egg",
+   choice:"How to choose the egg",
+   fridge: {
+     egg: "Egg",
+     milk: "Milk",
+   }
+ },
+ it: {
+   how:"Come vuoi il tuo uovo oggi?",
+   boiledEgg:"Uovo sodo",
+   softBoiledEgg:"Uovo alla coque",
+   choice:"Come scegliere l'uovo",
+   fridge: {
+     egg: "Uovo",
+     milk: "Latte",
+   }
+ }
 });
 ```
 
 Then use the `strings` object literal directly in the render method accessing the key of the localized string.
 
 ```js
-console.log ("HOW: " + strings.how);
+console.log("HOW: " + strings.how);
+// or
+console.log("HOW:" + strings.getValue("how"));
+```
+
+If value is missing getValue will not throw an error and break (e.g. using React)
+
+```js
+// gives err that breaks app
+console.log("Missing: " + strings.fridge.cabinet.toast);
+// returns null
+console.log("Missing:" + strings.getValue("fridge.cabinet.toast"));
 ```
 
 The first language is considered the default one, so if a translation is missing for the selected language, the default one is shown and a line is written to the log as a reminder.
 
 #### Update / Overwrite Locale
 
-You might have default localized in the build but then download the latest localization strings from a server. Use setContent to overwrite the whole object. 
+You might have default localized in the build but then download the latest localization strings from a server. Use setContent to overwrite the whole object.
 
 **NOTE** that this will remove all other localizations if used.
 
 ```js
 strings.setContent({
-  en:{
-    how:"How do you want your egg todajsie?",
-    boiledEgg:"Boiled eggsie",
-    softBoiledEgg:"Soft-boiled egg",
-    choice:"How to choose the egg"
+  en: {
+    how: "How do you want your egg todajsie?",
+    boiledEgg: "Boiled eggsie",
+    softBoiledEgg: "Soft-boiled egg",
+    choice: "How to choose the egg"
   }
-})
+});
 ```
 
 You can also only overwrite a specific language using:
 
 ```js
-strings.setContent(Object.assign({},strings.getContent(),
-{
-  en:{
-    how:"How do you want your egg todajsie?",
-    boiledEgg:"Boiled eggsie",
-    softBoiledEgg:"Soft-boiled egg",
-    choice:"How to choose the egg"
-  }
-}));
+strings.setContent(
+  Object.assign({}, strings.getContent(), {
+    en: {
+      how: "How do you want your egg todajsie?",
+      boiledEgg: "Boiled eggsie",
+      softBoiledEgg: "Soft-boiled egg",
+      choice: "How to choose the egg"
+    }
+  })
+);
 ```
 
 ## Custom getInterfaceLanguage method
@@ -86,55 +110,64 @@ The default method check the browser language but it could be replaced with othe
 The getInterfaceLanguage method can be as simple as:
 
 ```js
- function getCustomInterfaceLanguage(){
-   return "it-IT";
- }
- 
- let strings = new LocalizedStrings({
-  en:{
-    how:"How do you want your egg today?",
-    boiledEgg:"Boiled egg",
-    softBoiledEgg:"Soft-boiled egg",
-    choice:"How to choose the egg"
+function getCustomInterfaceLanguage() {
+  return "it-IT";
+}
+
+let strings = new LocalizedStrings(
+  {
+    en: {
+      how: "How do you want your egg today?",
+      boiledEgg: "Boiled egg",
+      softBoiledEgg: "Soft-boiled egg",
+      choice: "How to choose the egg"
+    },
+    it: {
+      how: "Come vuoi il tuo uovo oggi?",
+      boiledEgg: "Uovo sodo",
+      softBoiledEgg: "Uovo alla coque",
+      choice: "Come scegliere l'uovo"
+    }
   },
-  it: {
-    how:"Come vuoi il tuo uovo oggi?",
-    boiledEgg:"Uovo sodo",
-    softBoiledEgg:"Uovo alla coque",
-    choice:"Come scegliere l'uovo"
-  }
-}, getCustomInterfaceLanguage)
+  getCustomInterfaceLanguage
+);
 ```
 
 ### Nativescript example
+
 This is how you can use the library in a [Nativescript](https://www.nativescript.org) project
+
 ```js
 const platform = require("platform");
-this.strings = new LocalizedStrings({
-            it: {
-                score: "Punti",
-                time: "Tempo"
-            },
-            en: {
-                score: "Score",
-                time: "Time"
-            }
-        }, () => {
-            return platform.device.language;
-        }
-        );
+this.strings = new LocalizedStrings(
+  {
+    it: {
+      score: "Punti",
+      time: "Tempo"
+    },
+    en: {
+      score: "Score",
+      time: "Time"
+    }
+  },
+  () => {
+    return platform.device.language;
+  }
+);
 ```
+
 ## API
 
-* setLanguage(languageCode) - to force manually a particular language
-* getLanguage() - to get the current displayed language
-* getInterfaceLanguage() - to get the current device interface language
-* formatString() - to format the passed string replacing its placeholders with the other arguments strings
+- setLanguage(languageCode) - to force manually a particular language
+- getLanguage() - to get the current displayed language
+- getInterfaceLanguage() - to get the current device interface language (from Navigation.language in browsers, BCP-47, https://developer.mozilla.org/en-US/docs/Web/API/NavigatorLanguage/language)
+- getValue(path) - get value from string path, returns error instead of throws exception as with . notation
+- formatString() - to format the passed string replacing its placeholders {n} with the other arguments strings. Can also be used with $ref{id} to reference another string
+
 ```js
   en:{
-    bread:"bread",
-    butter:"butter",
-    question:"I'd like {0} and {1}, or just {0}"
+    question:"I'd like {0} and {1}, or just {0}",
+    questionWithReferences:"I'd like $ref{fridge.bread} and $ref{fridge.butter}, or just $ref{fridge.bread}",
     ...
     login: 'login',
     onlyForMembers: 'You have to {0} in order to use our app',
@@ -142,10 +175,23 @@ this.strings = new LocalizedStrings({
     iAmText: 'I am {0} text',
     ...
     january: 'January',
-    currentDate: 'The current date is {month} {day}, {year}!'
+    currentDate: 'The current date is {month} {day}, {year}!',
+    fridge: {
+      milk: 'milk',
+      eggs: 'eggs',
+      bread: 'bread',
+      butter: 'butter'
+    }
   }
   ...
-  strings.formatString(strings.question, strings.bread, strings.butter)
+  // Will output: I'd like bread and butter, or just bread
+  strings.formatString(strings.question, strings.fridge.bread, strings.fridge.butter)
+
+  // Will output: I'd like bread and butter, or just bread
+  strings.formatString(strings.question, strings.fridge)
+
+  // Will output: I'd like bread and butter, or just bread
+  strings.formatString(strings.questionWithReferences)
 
   // Named tokens can also be used to give some extra context to the format strings
   // You cannot mix tokens, something like formatString('{0}, {name}', 'Hello', {name: 'Bob'}) won't work
@@ -154,13 +200,18 @@ this.strings = new LocalizedStrings({
     day: 12,
     year: 2018
   })
+
+  // Possible to use formatString with dot-notation, this is same as .getString and will not crash the application if the key isn't found.
+  strings.formatString('fridge.missing.subnode')
 ```
+
 **Beware: do not define a string key as formatString!**
 
-* setContent(props) - to dynamically load another set of strings
-* getAvailableLanguages() - to get an array of the languages passed in the constructor
+- setContent(props) - to dynamically load another set of strings
+- getAvailableLanguages() - to get an array of the languages passed in the constructor
 
 ## Examples
+
 To force a particular language use something like this:
 
 ```js
@@ -171,11 +222,13 @@ _onSetLanguageToItalian() {
 ```
 
 ## Typescript support
+
 Because of the dynamically generated class properties, it's a little tricky to have the autocomplete functionality working.
 
 Anyway it's possible to gain the desired results by:
+
 1. defining an Interface that extends the LocalizedStringsMethods interface and has all the object string's keys
-2. defining that the LocalizedStrings instance implements that interface 
+2. defining that the LocalizedStrings instance implements that interface
 
 This is the suggested solution to work with Typescript:
 
@@ -196,8 +249,8 @@ this.strings = new LocalizedStrings({
                 time: "Time"
             }
         });
-
 ```
 
 ## Questions or suggestions?
+
 Feel free to contact me on [Twitter](https://twitter.com/talpaz) or [open an issue](https://github.com/stefalda/localized-strings/issues/new).

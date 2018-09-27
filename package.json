@@ -4,6 +4,7 @@
   "description": "Simple module to localize the strings of any JS based program using the same syntax used in the ReactLocalization and ReactNativeLocalization module, use 'npm run build' before publishing",
   "scripts": {
     "babel-version": "babel --version",
+    "lint": "eslint src/*.js",
     "test": "jasmine",
     "build": "babel src --out-dir lib"
   },
@@ -29,8 +30,11 @@
   "homepage": "https://github.com/stefalda/localized-strings#readme",
   "devDependencies": {
     "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "jasmine": "^3.1.0"
-  },
-  "dependencies": {}
+    "babel-preset-env": "^1.7.0",
+    "eslint": "^5.6.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "jasmine": "^3.1.0",
+    "babel-plugin-transform-object-assign": "^6.22.0"
+  }
 }
