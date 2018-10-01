@@ -23,14 +23,23 @@ export default class LocalizedStrings {
    * Constructor used to provide the strings objects in various language and the optional callback to get
    * the interface language
    * @param {*} props - the strings object
-   * @param {*} getInterfaceLanguageCallback - the optional method to use to get the InterfaceLanguage
+   * @param {Function} options.customLanguageInterface - the optional method to use to get the InterfaceLanguage
+   * @param {Boolean} options.pseudo - convert all strings to pseudo, helpful when implementing
+   * @param {Boolean} options.pseudoMultipleLanguages - add 40% to pseudo, helps with translations in the future
+   * @param {Boolean} options.logsEnabled - Enable/Disable console.log outputs (default=true)
    */
-  constructor(props, getInterfaceLanguageCallback) {
-    if (getInterfaceLanguageCallback) {
-      this._interfaceLanguage = getInterfaceLanguageCallback();
-    } else {
-      this._interfaceLanguage = utils.getInterfaceLanguage();
-    }
+  constructor(props, options) {
+    this._opts = Object.assign(
+      {},
+      {
+        customLanguageInterface: utils.getInterfaceLanguage,
+        pseudo: false,
+        pseudoMultipleLanguages: false,
+        logsEnabled: true,
+      },
+      options,
+    );
+    this._interfaceLanguage = this._opts.customLanguageInterface();
     this._language = this._interfaceLanguage;
     this.setContent(props);
   }
@@ -54,6 +63,46 @@ export default class LocalizedStrings {
     });
     // Set language to its default value (the interface)
     this.setLanguage(this._interfaceLanguage);
+    // Developermode with pseudo
+    if (this._opts.pseudo) {
+      this._pseudoAllValues(this._props);
+    }
+  }
+
+  /**
+   * Replace all strings to pseudo value
+   * @param {Object} obj - Loopable object
+   */
+  _pseudoAllValues(obj) {
+    Object.keys(obj).forEach((property) => {
+      if (typeof obj[property] === 'object') {
+        this._pseudoAllValues(obj[property]);
+      } else if (typeof obj[property] === 'string') {
+        if (
+          obj[property].indexOf('[') === 0
+          && obj[property].lastIndexOf(']') === obj[property].length - 1
+        ) {
+          // already psuedo fixed
+          return;
+        }
+        // @TODO must be a way to get regex to find all replaceble strings except our replacement variables
+        const strArr = obj[property].split(' ');
+        for (let i = 0; i < strArr.length; i += 1) {
+          if (strArr[i].match(placeholderReplaceRegex)) {
+            // we want to keep this string, includes specials
+          } else if (strArr[i].match(placeholderReferenceRegex)) {
+            // we want to keep this string, includes specials
+          } else {
+            let len = strArr[i].length;
+            if (this._opts.pseudoMultipleLanguages) {
+              len = parseInt(len * 1.4, 10); // add length with 40%
+            }
+            strArr[i] = utils.randomPseudo(len);
+          }
+        }
+        obj[property] = `[${strArr.join(' ')}]`; // eslint-disable-line no-param-reassign
+      }
+    });
   }
 
   /**
@@ -98,11 +147,13 @@ export default class LocalizedStrings {
         && strings[key] !== ''
       ) {
         strings[key] = defaultStrings[key]; // eslint-disable-line no-param-reassign
-        console.log(
-          `🚧 👷 key '${key}' not found in localizedStrings for language ${
-            this._language
-          } 🚧`,
-        );
+        if (this._opts.logsEnabled) {
+          console.log(
+            `🚧 👷 key '${key}' not found in localizedStrings for language ${
+              this._language
+            } 🚧`,
+          );
+        }
       } else if (typeof strings[key] !== 'string') {
         // It's an object
         this._fallbackValues(defaultStrings[key], strings[key]);
@@ -141,9 +192,11 @@ export default class LocalizedStrings {
   // Format the passed string replacing the numbered or tokenized placeholders
   // eg. 1: I'd like some {0} and {1}, or just {0}
   // eg. 2: I'd like some {bread} and {butter}, or just {bread}
+  // eg. 3: I'd like some $ref{bread} and $ref{butter}, or just $ref{bread}
   // Use example:
   // eg. 1: strings.formatString(strings.question, strings.bread, strings.butter)
   // eg. 2: strings.formatString(strings.question, { bread: strings.bread, butter: strings.butter })
+  // eg. 3: strings.formatString(strings.question)
   formatString(str, ...valuesForPlaceholders) {
     let input = str || '';
     if (typeof input === 'string') {
@@ -157,9 +210,11 @@ export default class LocalizedStrings {
           const matchedKey = textPart.slice(5, -1);
           const referenceValue = this.getString(matchedKey);
           if (referenceValue) return referenceValue;
-          console.log(
-            `No Localization ref found for '${textPart}' in string '${str}'`,
-          );
+          if (this._opts.logsEnabled) {
+            console.log(
+              `No Localization ref found for '${textPart}' in string '${str}'`,
+            );
+          }
           // lets print it another way so next replacer doesn't find it
           return `$ref(id:${matchedKey})`;
         }
@@ -205,7 +260,7 @@ export default class LocalizedStrings {
       }
       return current;
     } catch (ex) {
-      if (!omitWarning) {
+      if (!omitWarning && this._opts.logsEnabled) {
         console.log(
           `No localization found for key '${key}' and language '${language}', failed on ${
             ex.message

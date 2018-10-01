@@ -61,3 +61,14 @@ export function validateTranslationKeys(translationKeys) {
     }
   });
 }
+
+/**
+ * Get a random pseudo string back after specified a length
+ * @param {Number} len - How many characters to get back
+ */
+export function randomPseudo(len) {
+  let text = '';
+  const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  for (let i = 0; i < len; i += 1) text += possible.charAt(Math.floor(Math.random() * possible.length));
+  return text;
+}
