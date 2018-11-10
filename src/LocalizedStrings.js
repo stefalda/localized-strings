@@ -1,4 +1,4 @@
-import * as utils from './utils';
+import * as utils from "./utils";
 /**
  * Simple module to localize the React interface using the same syntax
  * used in the ReactNativeLocalization module
@@ -29,15 +29,19 @@ export default class LocalizedStrings {
    * @param {Boolean} options.logsEnabled - Enable/Disable console.log outputs (default=true)
    */
   constructor(props, options) {
+    //Compatibility fix with previous version
+    if (typeof options === "function") {
+      options = { customLanguageInterface: options };
+    }
     this._opts = Object.assign(
       {},
       {
         customLanguageInterface: utils.getInterfaceLanguage,
         pseudo: false,
         pseudoMultipleLanguages: false,
-        logsEnabled: true,
+        logsEnabled: true
       },
-      options,
+      options
     );
     this._interfaceLanguage = this._opts.customLanguageInterface();
     this._language = this._interfaceLanguage;
@@ -56,8 +60,8 @@ export default class LocalizedStrings {
     this._props = props;
     utils.validateTranslationKeys(Object.keys(props[this._defaultLanguage]));
     // Store first level keys (for identifying missing translations)
-    Object.keys(this._props[this._defaultLanguage]).forEach((key) => {
-      if (typeof this._props[this._defaultLanguage][key] === 'string') {
+    Object.keys(this._props[this._defaultLanguage]).forEach(key => {
+      if (typeof this._props[this._defaultLanguage][key] === "string") {
         this._defaultLanguageFirstLevelKeys.push(key);
       }
     });
@@ -74,19 +78,19 @@ export default class LocalizedStrings {
    * @param {Object} obj - Loopable object
    */
   _pseudoAllValues(obj) {
-    Object.keys(obj).forEach((property) => {
-      if (typeof obj[property] === 'object') {
+    Object.keys(obj).forEach(property => {
+      if (typeof obj[property] === "object") {
         this._pseudoAllValues(obj[property]);
-      } else if (typeof obj[property] === 'string') {
+      } else if (typeof obj[property] === "string") {
         if (
-          obj[property].indexOf('[') === 0
-          && obj[property].lastIndexOf(']') === obj[property].length - 1
+          obj[property].indexOf("[") === 0 &&
+          obj[property].lastIndexOf("]") === obj[property].length - 1
         ) {
           // already psuedo fixed
           return;
         }
         // @TODO must be a way to get regex to find all replaceble strings except our replacement variables
-        const strArr = obj[property].split(' ');
+        const strArr = obj[property].split(" ");
         for (let i = 0; i < strArr.length; i += 1) {
           if (strArr[i].match(placeholderReplaceRegex)) {
             // we want to keep this string, includes specials
@@ -100,7 +104,7 @@ export default class LocalizedStrings {
             strArr[i] = utils.randomPseudo(len);
           }
         }
-        obj[property] = `[${strArr.join(' ')}]`; // eslint-disable-line no-param-reassign
+        obj[property] = `[${strArr.join(" ")}]`; // eslint-disable-line no-param-reassign
       }
     });
   }
@@ -123,7 +127,7 @@ export default class LocalizedStrings {
         delete this[this._defaultLanguageFirstLevelKeys[i]];
       }
       let localizedStrings = Object.assign({}, this._props[this._language]);
-      Object.keys(localizedStrings).forEach((key) => {
+      Object.keys(localizedStrings).forEach(key => {
         this[key] = localizedStrings[key];
       });
       // Now add any string missing from the translation but existing in the default language
@@ -140,21 +144,21 @@ export default class LocalizedStrings {
    * @param {*} strings
    */
   _fallbackValues(defaultStrings, strings) {
-    Object.keys(defaultStrings).forEach((key) => {
+    Object.keys(defaultStrings).forEach(key => {
       if (
-        Object.prototype.hasOwnProperty.call(defaultStrings, key)
-        && !strings[key]
-        && strings[key] !== ''
+        Object.prototype.hasOwnProperty.call(defaultStrings, key) &&
+        !strings[key] &&
+        strings[key] !== ""
       ) {
         strings[key] = defaultStrings[key]; // eslint-disable-line no-param-reassign
         if (this._opts.logsEnabled) {
           console.log(
             `🚧 👷 key '${key}' not found in localizedStrings for language ${
               this._language
-            } 🚧`,
+            } 🚧`
           );
         }
-      } else if (typeof strings[key] !== 'string') {
+      } else if (typeof strings[key] !== "string") {
         // It's an object
         this._fallbackValues(defaultStrings[key], strings[key]);
       }
@@ -182,7 +186,7 @@ export default class LocalizedStrings {
   getAvailableLanguages() {
     if (!this._availableLanguages) {
       this._availableLanguages = [];
-      Object.keys(this._props).forEach((key) => {
+      Object.keys(this._props).forEach(key => {
         this._availableLanguages.push(key);
       });
     }
@@ -198,21 +202,21 @@ export default class LocalizedStrings {
   // eg. 2: strings.formatString(strings.question, { bread: strings.bread, butter: strings.butter })
   // eg. 3: strings.formatString(strings.question)
   formatString(str, ...valuesForPlaceholders) {
-    let input = str || '';
-    if (typeof input === 'string') {
+    let input = str || "";
+    if (typeof input === "string") {
       input = this.getString(str, null, true) || input;
     }
     const ref = input
       .split(placeholderReferenceRegex)
       .filter(textPart => !!textPart)
-      .map((textPart) => {
+      .map(textPart => {
         if (textPart.match(placeholderReferenceRegex)) {
           const matchedKey = textPart.slice(5, -1);
           const referenceValue = this.getString(matchedKey);
           if (referenceValue) return referenceValue;
           if (this._opts.logsEnabled) {
             console.log(
-              `No Localization ref found for '${textPart}' in string '${str}'`,
+              `No Localization ref found for '${textPart}' in string '${str}'`
             );
           }
           // lets print it another way so next replacer doesn't find it
@@ -220,17 +224,18 @@ export default class LocalizedStrings {
         }
         return textPart;
       })
-      .join('');
+      .join("");
     return ref
       .split(placeholderReplaceRegex)
       .filter(textPart => !!textPart)
-      .map((textPart) => {
+      .map(textPart => {
         if (textPart.match(placeholderReplaceRegex)) {
           const matchedKey = textPart.slice(1, -1);
           let valueForPlaceholder = valuesForPlaceholders[matchedKey];
           // If no value found, check if working with an object instead
           if (valueForPlaceholder === undefined) {
-            const valueFromObjectPlaceholder =              valuesForPlaceholders[0][matchedKey];
+            const valueFromObjectPlaceholder =
+              valuesForPlaceholders[0][matchedKey];
             if (valueFromObjectPlaceholder !== undefined) {
               valueForPlaceholder = valueFromObjectPlaceholder;
             } else {
@@ -243,7 +248,7 @@ export default class LocalizedStrings {
         }
         return textPart;
       })
-      .join('');
+      .join("");
   }
 
   // Return a string with the passed key in a different language or defalt if not set
@@ -251,7 +256,7 @@ export default class LocalizedStrings {
   getString(key, language, omitWarning = false) {
     try {
       let current = this._props[language || this._language];
-      const paths = key.split('.');
+      const paths = key.split(".");
       for (let i = 0; i < paths.length; i += 1) {
         if (current[paths[i]] === undefined) {
           throw Error(paths[i]);
@@ -264,7 +269,7 @@ export default class LocalizedStrings {
         console.log(
           `No localization found for key '${key}' and language '${language}', failed on ${
             ex.message
-          }`,
+          }`
         );
       }
     }
