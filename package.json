@@ -1,6 +1,6 @@
 {
   "name": "localized-strings",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Simple module to localize the strings of any JS based program using the same syntax used in the ReactLocalization and ReactNativeLocalization module, use 'npm run build' before publishing",
   "scripts": {
     "babel-version": "babel --version",
