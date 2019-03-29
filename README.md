@@ -56,16 +56,16 @@ Then use the `strings` object literal directly in the render method accessing th
 ```js
 console.log("HOW: " + strings.how);
 // or
-console.log("HOW:" + strings.getValue("how"));
+console.log("HOW:" + strings.getString("how"));
 ```
 
-If value is missing getValue will not throw an error and break (e.g. using React)
+If value is missing getString will not throw an error and break (e.g. using React)
 
 ```js
 // gives err that breaks app
 console.log("Missing: " + strings.fridge.cabinet.toast);
 // returns null
-console.log("Missing:" + strings.getValue("fridge.cabinet.toast"));
+console.log("Missing:" + strings.getString("fridge.cabinet.toast"));
 ```
 
 The first language is considered the default one, so if a translation is missing for the selected language, the default one is shown and a line is written to the log as a reminder.
@@ -203,7 +203,7 @@ This will make all strings about 40% longer.
 - setLanguage(languageCode) - to force manually a particular language
 - getLanguage() - to get the current displayed language
 - getInterfaceLanguage() - to get the current device interface language (from Navigation.language in browsers, BCP-47, https://developer.mozilla.org/en-US/docs/Web/API/NavigatorLanguage/language)
-- getValue(path) - get value from string path, returns error instead of throws exception as with . notation
+- getString(path) - get value from string path, returns error instead of throws exception as with . notation
 - formatString() - to format the passed string replacing its placeholders {n} with the other arguments strings. Can also be used with $ref{id} to reference another string
 
 ```js
