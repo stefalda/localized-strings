@@ -47,7 +47,7 @@ declare module "localized-strings" {
      * @param language
      * @param omitWarning
      */
-    getString(key: string, language: string, omitWarning: boolean): string;
+    getString(key: string, language?: string, omitWarning?: boolean): string;
 
     /**
      * Replace the NamedLocalization object without reinstantiating the object
