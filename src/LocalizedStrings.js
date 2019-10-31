@@ -29,9 +29,11 @@ export default class LocalizedStrings {
    * @param {Boolean} options.logsEnabled - Enable/Disable console.log outputs (default=true)
    */
   constructor(props, options) {
-    //Compatibility fix with previous version
+    // Compatibility fix with previous version
     if (typeof options === "function") {
+      /* eslint-disable no-param-reassign */
       options = { customLanguageInterface: options };
+      /* eslint-enable */
     }
     this._opts = Object.assign(
       {},
@@ -153,9 +155,7 @@ export default class LocalizedStrings {
         strings[key] = defaultStrings[key]; // eslint-disable-line no-param-reassign
         if (this._opts.logsEnabled) {
           console.log(
-            `🚧 👷 key '${key}' not found in localizedStrings for language ${
-              this._language
-            } 🚧`
+            `🚧 👷 key '${key}' not found in localizedStrings for language ${this._language} 🚧`
           );
         }
       } else if (typeof strings[key] !== "string") {
@@ -267,9 +267,7 @@ export default class LocalizedStrings {
     } catch (ex) {
       if (!omitWarning && this._opts.logsEnabled) {
         console.log(
-          `No localization found for key '${key}' and language '${language}', failed on ${
-            ex.message
-          }`
+          `No localization found for key '${key}' and language '${language}', failed on ${ex.message}`
         );
       }
     }
