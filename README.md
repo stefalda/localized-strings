@@ -141,7 +141,7 @@ let strings = new LocalizedStrings(
 This is how you can use the library in a [Nativescript](https://www.nativescript.org) project
 
 ```js
-const platform = require("platform");
+import * as platform from "tns-core-modules/platform";
 this.strings = new LocalizedStrings(
   {
     en: {
