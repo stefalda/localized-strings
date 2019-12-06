@@ -54,6 +54,11 @@ declare module "localized-strings" {
      * @param props
      */
     setContent(props: any): void;
+
+    /**
+     * Return current locale object
+     */
+    getContent(): any
   }
 
   export type LocalizedStrings<T> = LocalizedStringsMethods & T;
