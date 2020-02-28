@@ -157,9 +157,9 @@ this.strings = new LocalizedStrings(
 );
 ```
 
-## Psuedo Helper
+## Pseudo Helper
 
-Sometimes you have already a lot of text string in your project and starts to implement a language component. Using Psuedo during this phase can help to speed up finding what is done and not.
+Sometimes you have already a lot of text string in your project and starts to implement a language component. Using Pseudo during this phase can help to speed up finding what is done and not.
 
 In constructor you can enable
 
