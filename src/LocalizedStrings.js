@@ -56,7 +56,7 @@ export default class LocalizedStrings {
    * @param {*} props
    * @param {boolean} shouldSetLanguage
    */
-  setContent(props) {
+  setContent(props, shouldSetLanguage = true) {
     const [defaultLang] = Object.keys(props);
     this._defaultLanguage = defaultLang;
     this._defaultLanguageFirstLevelKeys = [];
