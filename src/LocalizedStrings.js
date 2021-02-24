@@ -24,6 +24,7 @@ export default class LocalizedStrings {
    * the interface language
    * @param {*} props - the strings object
    * @param {Function} options.customLanguageInterface - the optional method to use to get the InterfaceLanguage
+   * @param {Function} options.loadLanguage - Callback for dynamically getting languages
    * @param {Boolean} options.pseudo - convert all strings to pseudo, helpful when implementing
    * @param {Boolean} options.pseudoMultipleLanguages - add 40% to pseudo, helps with translations in the future
    * @param {Boolean} options.logsEnabled - Enable/Disable console.log outputs (default=true)
@@ -53,6 +54,7 @@ export default class LocalizedStrings {
   /**
    * Set the strings objects based on the parameter passed in the constructor
    * @param {*} props
+   * @param {boolean} shouldSetLanguage
    */
   setContent(props) {
     const [defaultLang] = Object.keys(props);
@@ -68,7 +70,9 @@ export default class LocalizedStrings {
       }
     });
     // Set language to its default value (the interface)
-    this.setLanguage(this._interfaceLanguage);
+    if (shouldSetLanguage) {
+      this.setLanguage(this._interfaceLanguage);
+    }
     // Developermode with pseudo
     if (this._opts.pseudo) {
       this._pseudoAllValues(this._props);
@@ -115,11 +119,15 @@ export default class LocalizedStrings {
    * Can be used from ouside the class to force a particular language
    * indipendently from the interface one
    * @param {*} language
+   * @param {boolean} loadLanguage
    */
-  setLanguage(language) {
+  setLanguage(language, loadLanguage = true) {
     // Check if exists a translation for the current language or if the default
     // should be used
-    const bestLanguage = utils.getBestMatchingLanguage(language, this._props);
+    const bestLanguage = utils.getBestMatchingLanguage(language, this._props,
+      loadLanguage
+        ? this._opts.loadLanguage
+        : null);
     const defaultLanguage = Object.keys(this._props)[0];
     this._language = bestLanguage;
     // Associate the language object to the this object

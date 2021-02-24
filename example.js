@@ -49,3 +49,37 @@ console.log('   ', strings.formatString('fridge.missing'));
 
 console.log('Input object that doesnt exists');
 console.log('   ', strings.formatString(strings.fridge.missing.more));
+
+const strings2 = new LocalizedStrings(
+  {
+    en: {
+      question: 'question',
+    },
+  },
+  {
+    loadLanguage: (countryCode) => {
+      const content = strings.getContent();
+      if (!content[countryCode]) {
+        // check if language is avaiable
+        // -> download and set content
+        strings2.setContent({
+          ...content,
+          sv: {
+            question: 'fråga',
+          },
+        });
+      }
+    },
+  },
+);
+
+// Will output: I'd like bread and butter, or just bread
+console.log('Input each value');
+console.log(
+  '   ',
+  strings2.formatString(
+    strings.question,
+    strings.fridge.bread,
+    strings.fridge.butter,
+  ),
+);

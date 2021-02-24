@@ -31,15 +31,26 @@ export function getInterfaceLanguage() {
  * Get the best match based on the language passed and the available languages
  * @param {*} language
  * @param {*} props
+ * @param {Function} loadLanguage
  */
-export function getBestMatchingLanguage(language, props) {
+export function getBestMatchingLanguage(language, props, loadLanguage) {
+  if (typeof loadLanguage === 'function') {
+    loadLanguage(language);
+  }
   // If an object with the passed language key exists return it
   if (props[language]) return language;
 
   // if the string is composed try to find a match with only the first language identifiers (en-US --> en)
   const idx = language.indexOf('-');
   const auxLang = idx >= 0 ? language.substring(0, idx) : language;
-  return props[auxLang] ? auxLang : Object.keys(props)[0];
+  const lang = props[auxLang] ? auxLang : Object.keys(props)[0];
+
+  // if language does not exist try to load it by aux lang
+  if (typeof loadLanguage === 'function') {
+    loadLanguage(auxLang);
+  }
+
+  return lang;
 }
 
 /**
