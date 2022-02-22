@@ -305,7 +305,8 @@ describe("language listener", () => {
   });
 
   it("run listener", (done) => {
-    strings.addLanguageChangeListener(() => {
+    strings.addLanguageChangeListener((language) => {
+      expect(language).toBe("sv");
       done();
     });
 

@@ -149,7 +149,7 @@ export default class LocalizedStrings {
       }
     }
 
-    this._runLanguageListeners();
+    this._runLanguageListeners(bestLanguage);
   }
 
   /**
@@ -293,10 +293,10 @@ export default class LocalizedStrings {
     return this._props;
   }
 
-  _runLanguageListeners() {
+  _runLanguageListeners(language) {
     this._languageListeners.forEach((listener) => {
       try {
-        listener();
+        listener(language);
       } catch (error) {
         /* no op */
       }

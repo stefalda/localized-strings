@@ -63,7 +63,7 @@ declare module "localized-strings" {
     /**
      * Listen to language changes
      */
-    addLanguageChangeListener: (callback: () => void) => void;
+    addLanguageChangeListener: (callback: (language: string) => void) => void;
 
     /**
      * Remove language listener
