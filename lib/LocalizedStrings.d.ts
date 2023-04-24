@@ -34,7 +34,7 @@ declare module "localized-strings" {
     formatString<T extends Formatted>(
       str: string,
       ...values: Array<T | FormatObject<T>>
-    ): Array<string | T> | string;
+    ): string;
 
     /**
      * Return an array containing the available languages passed as props in the constructor
