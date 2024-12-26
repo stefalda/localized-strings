@@ -1,4 +1,4 @@
-import * as utils from "./utils";
+import * as utils from "./utils.js";
 /**
  * Simple module to localize the React interface using the same syntax
  * used in the ReactNativeLocalization module

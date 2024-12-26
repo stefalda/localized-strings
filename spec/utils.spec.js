@@ -1,4 +1,4 @@
-import * as utils from '../src/utils';
+import * as utils from '../src/utils.js';
 
 describe('getInterfaceLanguage', () => {
   it('returns default language if not set', () => {
@@ -50,4 +50,3 @@ describe('validateTranslationKeys', () => {
     expect(() => utils.validateTranslationKeys(['hello', '_defaultLanguageFirstLevelKeys'])).toThrow();
   });
 });
-

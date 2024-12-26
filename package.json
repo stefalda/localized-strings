@@ -1,11 +1,12 @@
 {
   "name": "localized-strings",
-  "version": "0.2.4",
+  "version": "1.0.0",
   "description": "Simple module to localize the strings of any JS based program using the same syntax used in the ReactLocalization and ReactNativeLocalization module, use 'npm run build' before publishing",
+  "type": "module",
   "scripts": {
     "babel-version": "babel --version",
     "lint": "eslint src/*.js",
-    "test": "jasmine",
+    "test": "node --experimental-vm-modules node_modules/jasmine/bin/jasmine.js",
     "build": "babel src --out-dir lib"
   },
   "repository": {
@@ -20,7 +21,14 @@
     "typescript",
     "nativescript"
   ],
-  "main": "./lib/LocalizedStrings.js",
+  "exports": {
+    ".": {
+      "import": "./lib/LocalizedStrings.js",
+      "require": "./lib/LocalizedStrings.cjs"
+    }
+  },
+  "main": "./lib/LocalizedStrings.cjs",
+  "module": "./lib/LocalizedStrings.js",
   "types": "./lib/LocalizedStrings.d.ts",
   "author": "Stefano Falda <stefano.falda@gmail.com> (http://www.babisoft.com)",
   "license": "MIT",
@@ -29,12 +37,12 @@
   },
   "homepage": "https://github.com/stefalda/localized-strings#readme",
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
+    "@babel/cli": "^7.23.0",
+    "@babel/core": "^7.23.0",
+    "@babel/preset-env": "^7.23.0",
     "eslint": "^5.6.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",
-    "jasmine": "^3.1.0",
-    "babel-plugin-transform-object-assign": "^6.22.0"
+    "jasmine": "^5.1.0"
   }
 }

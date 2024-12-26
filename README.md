@@ -1,16 +1,21 @@
 # localized-strings
 
-Simple module to localize the strings of any JS based program using the same syntax used in the
+Simple module to localize the strings of any JS based program using the same
+syntax used in the
 [ReactLocalization module](https://github.com/stefalda/react-localization/) and
-[ReactNativeLocalization module](https://github.com/stefalda/ReactNativeLocalization/) libraries.
+[ReactNativeLocalization module](https://github.com/stefalda/ReactNativeLocalization/)
+libraries.
 
 ## How it works
 
-The library uses the current interface language, then it loads and displays the strings matching the current interface locale or the default language (the first one if a match is not found) if a specific localization can't be found.
+The library uses the current interface language, then it loads and displays the
+strings matching the current interface locale or the default language (the first
+one if a match is not found) if a specific localization can't be found.
 
 It's possible to force a language different from the interface one.
 
-It's possible to configure the library to use a specific routine that return the interface language, so it's possible to extend it in any possible environment.
+It's possible to configure the library to use a specific routine that return the
+interface language, so it's possible to extend it in any possible environment.
 
 ## Installation
 
@@ -18,13 +23,18 @@ It's possible to configure the library to use a specific routine that return the
 
 ## Usage
 
-In the class that you want to localize require the library and define the strings object passing to the constructor a simple object containing a language key (i.e. en, it, fr..) and then a list of key-value pairs with the needed localized strings.
+In the class that you want to localize require the library and define the
+strings object passing to the constructor a simple object containing a language
+key (i.e. en, it, fr..) and then a list of key-value pairs with the needed
+localized strings.
 
 ```js
-\\ES6 module syntax
-import LocalizedStrings from 'localized-strings';
-\\CommonJS module syntax
-const LocalizedStrings = require('LocalizedStrings').default;
+\\ESM imports: 
+
+import { LocalizedStrings } from 'localized-strings'
+
+\\CommonJS requires: 
+const { LocalizedStrings } = require('localized-strings')
 
 let strings = new LocalizedStrings({
   en:{
@@ -51,7 +61,8 @@ let strings = new LocalizedStrings({
 );
 ```
 
-Then use the `strings` object literal directly in the render method accessing the key of the localized string.
+Then use the `strings` object literal directly in the render method accessing
+the key of the localized string.
 
 ```js
 console.log("HOW: " + strings.how);
@@ -59,7 +70,8 @@ console.log("HOW: " + strings.how);
 console.log("HOW:" + strings.getString("how"));
 ```
 
-If value is missing getString will not throw an error and break (e.g. using React)
+If value is missing getString will not throw an error and break (e.g. using
+React)
 
 ```js
 // gives err that breaks app
@@ -68,11 +80,15 @@ console.log("Missing: " + strings.fridge.cabinet.toast);
 console.log("Missing:" + strings.getString("fridge.cabinet.toast"));
 ```
 
-The first language is considered the default one, so if a translation is missing for the selected language, the default one is shown and a line is written to the log as a reminder.
+The first language is considered the default one, so if a translation is missing
+for the selected language, the default one is shown and a line is written to the
+log as a reminder.
 
 #### Update / Overwrite Locale
 
-You might have default localized in the build but then download the latest localization strings from a server. Use setContent to overwrite the whole object.
+You might have default localized in the build but then download the latest
+localization strings from a server. Use setContent to overwrite the whole
+object.
 
 **NOTE** that this will remove all other localizations if used.
 
@@ -82,8 +98,8 @@ strings.setContent({
     how: "How do you want your egg todajsie?",
     boiledEgg: "Boiled eggsie",
     softBoiledEgg: "Soft-boiled egg",
-    choice: "How to choose the egg"
-  }
+    choice: "How to choose the egg",
+  },
 });
 ```
 
@@ -96,9 +112,9 @@ strings.setContent(
       how: "How do you want your egg todajsie?",
       boiledEgg: "Boiled eggsie",
       softBoiledEgg: "Soft-boiled egg",
-      choice: "How to choose the egg"
-    }
-  })
+      choice: "How to choose the egg",
+    },
+  }),
 );
 ```
 
@@ -106,7 +122,9 @@ strings.setContent(
 
 You can pass a custom method to get the current interface based on the context.
 
-The default method check the browser language but it could be replaced with other check if you are in a Server, ReactNative or [Nativescript](https://www.nativescript.org) project.
+The default method check the browser language but it could be replaced with
+other check if you are in a Server, ReactNative or
+[Nativescript](https://www.nativescript.org) project.
 
 The getInterfaceLanguage method can be as simple as:
 
@@ -121,24 +139,25 @@ let strings = new LocalizedStrings(
       how: "How do you want your egg today?",
       boiledEgg: "Boiled egg",
       softBoiledEgg: "Soft-boiled egg",
-      choice: "How to choose the egg"
+      choice: "How to choose the egg",
     },
     it: {
       how: "Come vuoi il tuo uovo oggi?",
       boiledEgg: "Uovo sodo",
       softBoiledEgg: "Uovo alla coque",
-      choice: "Come scegliere l'uovo"
-    }
+      choice: "Come scegliere l'uovo",
+    },
   },
   {
-    customLanguageInterface: getCustomInterfaceLanguage
-  }
+    customLanguageInterface: getCustomInterfaceLanguage,
+  },
 );
 ```
 
 ### Nativescript example
 
-This is how you can use the library in a [Nativescript](https://www.nativescript.org) project
+This is how you can use the library in a
+[Nativescript](https://www.nativescript.org) project
 
 ```js
 import * as platform from "tns-core-modules/platform";
@@ -146,20 +165,22 @@ this.strings = new LocalizedStrings(
   {
     en: {
       score: "Score",
-      time: "Time"
-    }
+      time: "Time",
+    },
   },
   {
     customLanguageInterface: () => {
       return platform.device.language;
-    }
-  }
+    },
+  },
 );
 ```
 
 ## Pseudo Helper
 
-Sometimes you have already a lot of text string in your project and starts to implement a language component. Using Pseudo during this phase can help to speed up finding what is done and not.
+Sometimes you have already a lot of text string in your project and starts to
+implement a language component. Using Pseudo during this phase can help to speed
+up finding what is done and not.
 
 In constructor you can enable
 
@@ -167,7 +188,10 @@ In constructor you can enable
 pseudo: true;
 ```
 
-This will turn a string as 'hello you' to '[qxjE2gx qtBy]'. This will help you quickly to see what strings are not using the localized-strings component. The randomized characters are wrapped in [ ]. These are to help you view the bounds of the string, so if they arent visible it might be outside the viewing area.
+This will turn a string as 'hello you' to '[qxjE2gx qtBy]'. This will help you
+quickly to see what strings are not using the localized-strings component. The
+randomized characters are wrapped in [ ]. These are to help you view the bounds
+of the string, so if they arent visible it might be outside the viewing area.
 
 ### Multiple Languages
 
@@ -184,27 +208,32 @@ This will make all strings about 40% longer.
 - constructor(languageObject,options)
 
 ```js
-  options
-  {
-    // custom function that returns device language
-    // @see 'Custom getInterfaceLanguage method' for more info
-    customLanguageInterface: () => return 'it-IT'
-    // Output issues finding strings and references
-    logsEnabled: true
-    // Helper for finding string that is implemented
-    // @see Pseudo Helper for more info
-    pseudo: false
-    // Helper for preparing multiple langauges
-    // @see Pseudo Helper for more info
-    pseudoMultipleLanguages: false
-  }
+options
+{
+  // custom function that returns device language
+  // @see 'Custom getInterfaceLanguage method' for more info
+  customLanguageInterface: () => return 'it-IT'
+  // Output issues finding strings and references
+  logsEnabled: true
+  // Helper for finding string that is implemented
+  // @see Pseudo Helper for more info
+  pseudo: false
+  // Helper for preparing multiple langauges
+  // @see Pseudo Helper for more info
+  pseudoMultipleLanguages: false
+}
 ```
 
 - setLanguage(languageCode) - to force manually a particular language
 - getLanguage() - to get the current displayed language
-- getInterfaceLanguage() - to get the current device interface language (from Navigation.language in browsers, BCP-47, https://developer.mozilla.org/en-US/docs/Web/API/NavigatorLanguage/language)
-- getString(path) - get value from string path, returns error instead of throws exception as with . notation
-- formatString() - to format the passed string replacing its placeholders {n} with the other arguments strings. Can also be used with $ref{id} to reference another string
+- getInterfaceLanguage() - to get the current device interface language (from
+  Navigation.language in browsers, BCP-47,
+  https://developer.mozilla.org/en-US/docs/Web/API/NavigatorLanguage/language)
+- getString(path) - get value from string path, returns error instead of throws
+  exception as with . notation
+- formatString() - to format the passed string replacing its placeholders {n}
+  with the other arguments strings. Can also be used with $ref{id} to reference
+  another string
 
 ```js
   en:{
@@ -244,7 +273,8 @@ This will make all strings about 40% longer.
 **Beware: do not define a string key as formatString!**
 
 - setContent(props) - to dynamically load another set of strings
-- getAvailableLanguages() - to get an array of the languages passed in the constructor
+- getAvailableLanguages() - to get an array of the languages passed in the
+  constructor
 
 ## Examples
 
@@ -259,11 +289,13 @@ _onSetLanguageToItalian() {
 
 ## Typescript support
 
-Because of the dynamically generated class properties, it's a little tricky to have the autocomplete functionality working.
+Because of the dynamically generated class properties, it's a little tricky to
+have the autocomplete functionality working.
 
 Anyway it's possible to gain the desired results by:
 
-1. defining an Interface that extends the LocalizedStringsMethods interface and has all the object string's keys
+1. defining an Interface that extends the LocalizedStringsMethods interface and
+   has all the object string's keys
 2. defining that the LocalizedStrings instance implements that interface
 
 This is the suggested solution to work with Typescript:
@@ -289,4 +321,6 @@ this.strings = new LocalizedStrings({
 
 ## Questions or suggestions?
 
-Feel free to contact me on [Twitter](https://twitter.com/talpaz) or [open an issue](https://github.com/stefalda/localized-strings/issues/new).
+Feel free to contact me on [Mastodon](https://mastodon.uno/sfalda),
+[Bluesky](@sfalda.bsky.social) or
+[open an issue](https://github.com/stefalda/localized-strings/issues/new).

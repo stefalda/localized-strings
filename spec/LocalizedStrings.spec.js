@@ -1,4 +1,4 @@
-import LocalizedStrings from '../lib/LocalizedStrings';
+import LocalizedStrings from '../lib/LocalizedStrings.js';
 
 describe('Main Library Functions', () => {
   /**
