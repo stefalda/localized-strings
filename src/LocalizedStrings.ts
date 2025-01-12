@@ -174,7 +174,7 @@ export default class LocalizedStrings {
     return this._availableLanguages;
   }
 
-  formatString(str: string, ...valuesForPlaceholders: any[]): string {
+  formatString(str: string, ...valuesForPlaceholders: any[]): string | any[] {
     let input = str || "";
     if (typeof input === "string") {
       input = this.getString(str, null, true) || input;
