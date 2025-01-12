@@ -45,7 +45,7 @@ export default class LocalizedStrings {
     getLanguage(): string;
     getInterfaceLanguage(): string;
     getAvailableLanguages(): string[];
-    formatString(str: string, ...valuesForPlaceholders: any[]): string;
+    formatString(str: string, ...valuesForPlaceholders: any[]): string | any[];
     getString(key: string, language?: string | null, omitWarning?: boolean): string | null;
     getContent(): LocalizedStringsProps;
 }
