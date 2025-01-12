@@ -18,9 +18,11 @@
   ],
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
     "lint": "eslint 'src/**/*.{js,ts}'",
-    "test": "vitest"
+    "test": "vitest",
+    "build:vite": "vite build",
+    "build:types": "tsc --emitDeclarationOnly",
+    "build": "npm run build:vite && npm run build:types"
   },
   "repository": {
     "type": "git",
