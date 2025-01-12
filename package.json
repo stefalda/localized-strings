@@ -1,13 +1,26 @@
 {
   "name": "localized-strings",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Simple module to localize the strings of any JS based program using the same syntax used in the ReactLocalization and ReactNativeLocalization module, use 'npm run build' before publishing",
   "type": "module",
+  "main": "./lib/LocalizedStrings.umd.js",
+  "module": "./lib/LocalizedStrings.es.js",
+  "types": "./lib/LocalizedStrings.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/LocalizedStrings.d.ts",
+      "import": "./lib/LocalizedStrings.es.js",
+      "require": "./lib/LocalizedStrings.umd.js"
+    }
+  },
+  "files": [
+    "lib"
+  ],
   "scripts": {
-    "babel-version": "babel --version",
-    "lint": "eslint src/*.js",
-    "test": "node --experimental-vm-modules node_modules/jasmine/bin/jasmine.js",
-    "build": "babel src --out-dir lib"
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint": "eslint 'src/**/*.{js,ts}'",
+    "test": "vitest"
   },
   "repository": {
     "type": "git",
@@ -21,15 +34,6 @@
     "typescript",
     "nativescript"
   ],
-  "exports": {
-    ".": {
-      "import": "./lib/LocalizedStrings.js",
-      "require": "./lib/LocalizedStrings.cjs"
-    }
-  },
-  "main": "./lib/LocalizedStrings.cjs",
-  "module": "./lib/LocalizedStrings.js",
-  "types": "./lib/LocalizedStrings.d.ts",
   "author": "Stefano Falda <stefano.falda@gmail.com> (http://www.babisoft.com)",
   "license": "MIT",
   "bugs": {
@@ -37,12 +41,12 @@
   },
   "homepage": "https://github.com/stefalda/localized-strings#readme",
   "devDependencies": {
-    "@babel/cli": "^7.23.0",
-    "@babel/core": "^7.23.0",
-    "@babel/preset-env": "^7.23.0",
-    "eslint": "^5.6.0",
-    "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.14.0",
-    "jasmine": "^5.1.0"
+    "eslint": "^8.57.1",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.31.0",
+    "typescript": "^5.7.3",
+    "vite": "^6.0.7",
+    "vitest": "^2.1.8",
+    "@types/node": "^22.10.5"
   }
 }

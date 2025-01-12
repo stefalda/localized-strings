@@ -31,10 +31,10 @@ localized strings.
 ```js
 \\ESM imports: 
 
-import { LocalizedStrings } from 'localized-strings'
+import  LocalizedStrings from 'localized-strings'
 
 \\CommonJS requires: 
-const { LocalizedStrings } = require('localized-strings')
+const  LocalizedStrings  = require('localized-strings')
 
 let strings = new LocalizedStrings({
   en:{

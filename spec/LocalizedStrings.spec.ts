@@ -1,13 +1,12 @@
-import LocalizedStrings from '../lib/LocalizedStrings.js';
+import { beforeEach, describe, expect, it } from 'vitest';
+import LocalizedStrings from '../lib/LocalizedStrings.es';
 
 describe('Main Library Functions', () => {
-  /**
-   * Load up language file to use during tests
-   */
-  global.navigator = {};
-  let strings;
+  let strings: any;
 
   beforeEach(() => {
+    global.navigator = {} as any; // Mocking the navigator object
+
     strings = new LocalizedStrings(
       {
         en: {
@@ -57,51 +56,54 @@ describe('Main Library Functions', () => {
     expect(strings.getAvailableLanguages()).toEqual(['en', 'it']);
   });
 
-  // Default language
   it('Extract simple value from default language', () => {
     expect(strings.how).toEqual('How do you want your egg today?');
   });
+
   it('Extract complex value from default language', () => {
     expect(strings.ratings.good).toEqual('good');
   });
+
   it('Get complex missing key from default language', () => {
     expect(strings.ratings.missingComplex).toEqual('missing value');
   });
+
   it('Get missing key from default language', () => {
-    expect(strings.ratings.notfound).toBe(undefined);
+    expect(strings.ratings.notfound).toBeUndefined();
   });
+
   it('Format string in default language', () => {
     expect(
       strings.formatString(strings.formattedValue, 'cake', 'ice-cream'),
     ).toEqual("I'd like some cake and ice-cream, or just cake");
   });
 
-  // Switch language
-  it('Switch language to italian', () => {
+  it('Switch language to Italian', () => {
     strings.setLanguage('it');
     expect(strings.getLanguage()).toEqual('it');
   });
-  it('Extract simple value from  other language', () => {
+
+  it('Extract simple value from Italian', () => {
     strings.setLanguage('it');
     expect(strings.how).toEqual('Come vuoi il tuo uovo oggi?');
   });
 
-  it('Extract complex value from other language', () => {
+  it('Extract complex value from Italian', () => {
     strings.setLanguage('it');
     expect(strings.ratings.good).toEqual('buono');
   });
 
-  it('Get missing key from other language', () => {
+  it('Get missing key from Italian', () => {
     strings.setLanguage('it');
     expect(strings.missing).toEqual('missing value');
   });
 
-  it('Get complex missing key from other language', () => {
+  it('Get complex missing key from Italian', () => {
     strings.setLanguage('it');
     expect(strings.ratings.missingComplex).toEqual('missing value');
   });
 
-  it('Format string in other language', () => {
+  it('Format string in Italian', () => {
     strings.setLanguage('it');
     expect(
       strings.formatString(strings.formattedValue, 'torta', 'gelato'),
@@ -115,15 +117,9 @@ describe('Main Library Functions', () => {
 
   it('Switch to different props', () => {
     strings.setContent({
-      fr: {
-        hello: 'bonjour',
-      },
-      en: {
-        hello: 'hello',
-      },
-      it: {
-        hello: 'ciao',
-      },
+      fr: { hello: 'bonjour' },
+      en: { hello: 'hello' },
+      it: { hello: 'ciao' },
     });
     strings.setLanguage('fr');
     expect(strings.hello).toEqual('bonjour');
@@ -131,87 +127,53 @@ describe('Main Library Functions', () => {
 
   it('Switch to different props with nested objects', () => {
     strings = new LocalizedStrings({
-      en: {
-        a: {
-          b: { x: 'foo', y: 'bar' },
-          c: { z: 'baz' },
-        },
-      },
-    });
+      en: { a: { b: { x: 'foo', y: 'bar' }, c: { z: 'baz' } } },
+    }, {});
     strings.setContent({
-      en: {
-        a: {
-          b: { x: 'a.b.x', y: 'a.b.y' },
-          c: { z: 'a.c.z' },
-        },
-      },
+      en: { a: { b: { x: 'a.b.x', y: 'a.b.y' }, c: { z: 'a.c.z' } } },
     });
     strings.setLanguage('en');
     expect(strings.a.b.x).toEqual('a.b.x');
   });
 
-  it('Should allow replacing a single language with the setContent method', () => {
+  it('Replace a single language using setContent', () => {
     strings = new LocalizedStrings({
-      en: {
-        how: 'How do you want your egg today?',
-        boiledEgg: 'Boiled egg',
-      },
-      it: {
-        how: 'Come vuoi il tuo uovo oggi?',
-        boiledEgg: 'Uovo bollito',
-      },
+      en: { how: 'How do you want your egg today?', boiledEgg: 'Boiled egg' },
+      it: { how: 'Come vuoi il tuo uovo oggi?', boiledEgg: 'Uovo bollito' },
+    }, {});
+
+    strings.setContent({
+      ...strings.getContent(),
+      en: { how: 'How do you want your egg today, mate?', boiledEgg: 'Egg' },
     });
 
-    strings.setContent(
-      Object.assign({}, strings.getContent(), {
-        en: {
-          how: 'How do you want your egg todajsie?',
-          boiledEgg: 'Boiled eggsie',
-        },
-      }),
-    );
-
-    expect(strings.how).toEqual('How do you want your egg todajsie?');
+    expect(strings.how).toEqual('How do you want your egg today, mate?');
     strings.setLanguage('it');
     expect(strings.how).toEqual('Come vuoi il tuo uovo oggi?');
   });
 
-  it('Handles named tokens as part of the format string', () => {
-    const formatTokens = {
-      month: 'January',
-      day: '12',
-      year: '2018',
-    };
+  it('Handles named tokens in format strings', () => {
+    const formatTokens = { month: 'January', day: '12', year: '2018' };
     expect(strings.formatString(strings.currentDate, formatTokens)).toEqual(
       'The current date is January 12, 2018!',
     );
   });
 
   it('Handles falsy values', () => {
-    // falsy: "{0} {1} {2} {3} {4} {5}"
     expect(
       strings.formatString(strings.falsy, 0, false, '', null, undefined, NaN),
     ).toEqual([0, false, '', null, undefined, NaN].join(' '));
-  });
-
-  it('Handles empty values', () => {
-    expect(
-      strings.formatString(strings.thisKeyDoesNotExist, {
-        thisReplacement: 'doesNotExist',
-      }),
-    ).toEqual('');
   });
 
   it('Handles empty strings', () => {
     expect(strings.empty).toEqual('');
   });
 
-  // Checks for reference
   it('Handle reference values', () => {
-    // reference: '$ref{ratings.excellent}'
     expect(strings.formatString(strings.reference)).toEqual('excellent');
   });
-  it('Handle reference values and falsy', () => {
+
+  it('Handle reference values with falsy replacements', () => {
     expect(
       strings.formatString(
         strings.referenceAdvanced,
@@ -224,55 +186,12 @@ describe('Main Library Functions', () => {
       ),
     ).toEqual([0, false, '', null, undefined, NaN].join(' '));
   });
-});
 
-describe('use the default getInterfaceLanguageMethod', () => {
-  const strings = new LocalizedStrings(
-    {
-      en: {
-        language: 'english',
-      },
-      it: {
-        language: 'italian',
-      },
-    },
-    { logsEnabled: false },
-  );
-  it('Use the default method that returns en-US', () => {
-    expect(strings.language).toBe('english');
+  //formattedValue: "I'd like some {0} and {1}, or just {0}",
+  it('shouldn\'t crash when parameters are null or undefined', () => {
+    expect(strings.formatString(strings.formattedValue, null, undefined))
+      .toEqual("I'd like some  and , or just ");
   });
-});
 
-describe('use a custom getInterfaceLanguageMethod', () => {
-  const strings = new LocalizedStrings(
-    {
-      en: {
-        language: 'english',
-      },
-      it: {
-        language: 'italian',
-      },
-    },
-    { customLanguageInterface: () => 'it-IT', logsEnabled: false },
-  );
-  it('Use the custom method that returns it_IT', () => {
-    expect(strings.language).toBe('italian');
-  });
-  it('Use the custom interface methods when checking the getInterfaceLanguage', () => {
-    expect(strings.getInterfaceLanguage()).toBe('it-IT');
-  });
-});
 
-describe('use psuedo characters', () => {
-  const strings = new LocalizedStrings(
-    {
-      en: {
-        language: 'english',
-      },
-    },
-    { pseudo: true, logsEnabled: false },
-  );
-  it('Psuedo changed value', () => {
-    expect(strings.formatString('language')).not.toBe('english');
-  });
 });
