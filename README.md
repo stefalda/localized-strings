@@ -159,6 +159,27 @@ let strings = new LocalizedStrings(
 This is how you can use the library in a
 [Nativescript](https://www.nativescript.org) project
 
+#### NativeScript 7+
+
+```js
+import { Device } from '@nativescript/core'
+this.strings = new LocalizedStrings(
+  {
+    en: {
+      score: "Score",
+      time: "Time",
+    },
+  },
+  {
+    customLanguageInterface: () => {
+      return Device.language;
+    },
+  },
+);
+```
+
+#### NativeScript prior to 7
+
 ```js
 import * as platform from "tns-core-modules/platform";
 this.strings = new LocalizedStrings(
