@@ -1,11 +1,11 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import LocalizedStrings from '../lib/LocalizedStrings.es';
 
 describe('Main Library Functions', () => {
   let strings: any;
 
   beforeEach(() => {
-    global.navigator = {} as any; // Mocking the navigator object
+    vi.stubGlobal('navigator', {}); // Mocking the navigator object
 
     strings = new LocalizedStrings(
       {
@@ -46,6 +46,10 @@ describe('Main Library Functions', () => {
       },
       { logsEnabled: false },
     );
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
   });
 
   it('Set default language to en', () => {

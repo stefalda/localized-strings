@@ -1,39 +1,43 @@
-import { describe, it, expect, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import * as utils from '../src/utils.ts';
+
+afterEach(() => {
+  vi.unstubAllGlobals();
+});
 
 describe('getInterfaceLanguage', () => {
   it('returns default language if not set', () => {
-    global.navigator = {} as Navigator;
+    vi.stubGlobal('navigator', {});
     expect(utils.getInterfaceLanguage()).toBe('en-US');
   });
 
   it('returns language when found', () => {
-    global.navigator = { language: 'fi' } as Navigator;
+    vi.stubGlobal('navigator', { language: 'fi' });
     expect(utils.getInterfaceLanguage()).toBe('fi');
   });
 
   it('returns first in languages if set', () => {
-    global.navigator = { languages: ['it', 'fr'] } as unknown as Navigator;
+    vi.stubGlobal('navigator', { languages: ['it', 'fr'] });
     expect(utils.getInterfaceLanguage()).toBe('it');
   });
 
   it('returns userLanguage if set', () => {
-    global.navigator = { userLanguage: 'fi' } as any; // `userLanguage` is non-standard
+    vi.stubGlobal('navigator', { userLanguage: 'fi' }); // `userLanguage` is non-standard
     expect(utils.getInterfaceLanguage()).toBe('fi');
   });
 
   it('returns browserLanguage if set', () => {
-    global.navigator = { browserLanguage: 'it' } as any; // `browserLanguage` is non-standard
+    vi.stubGlobal('navigator', { browserLanguage: 'it' }); // `browserLanguage` is non-standard
     expect(utils.getInterfaceLanguage()).toBe('it');
   });
 
   it('returns language when all properties are available', () => {
-    global.navigator = {
+    vi.stubGlobal('navigator', {
       language: 'hu',
       languages: ['fr'],
       userLanguage: 'de',
       browserLanguage: 'it',
-    } as any; // Combine standard and non-standard properties
+    }); // Combine standard and non-standard properties
     expect(utils.getInterfaceLanguage()).toBe('hu');
   });
 });

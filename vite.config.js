@@ -12,7 +12,7 @@ export default defineConfig({
         outDir: 'lib/',
         emptyOutDir: true, 
         lib: {
-            entry: resolve(__dirname, 'src/LocalizedStrings.ts'),
+            entry: resolve(import.meta.dirname, 'src/LocalizedStrings.ts'),
             name: 'LocalizedStrings',
             formats: ['es', 'umd'],
             fileName: (format) => `LocalizedStrings.${format}.js`,
@@ -25,7 +25,7 @@ export default defineConfig({
     },
     test: {
         globals: true,
-        environment: 'jsdom',
+        environment: 'node',
         include: ['spec/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
     },
 });

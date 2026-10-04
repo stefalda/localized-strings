@@ -7,6 +7,7 @@
     "skipLibCheck": true,
     "declaration": true,           // This enables .d.ts file generation
     "declarationDir": "./lib",     // This specifies where .d.ts files go
+    "rootDir": "./src",
     "emitDeclarationOnly": true,   // This tells tsc to only emit declarations
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
