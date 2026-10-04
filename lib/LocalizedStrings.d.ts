@@ -1,47 +1,17 @@
-interface LocalizedStringsProps {
+export interface LocalizedStringsProps {
     [language: string]: {
         [key: string]: any;
     };
 }
-interface LocalizedStringsOptions {
+export interface LocalizedStringsOptions {
     customLanguageInterface?: () => string;
     pseudo?: boolean;
     pseudoMultipleLanguages?: boolean;
     logsEnabled?: boolean;
 }
-export default class LocalizedStrings {
-    private _opts;
-    private _interfaceLanguage;
-    private _language;
-    private _defaultLanguage;
-    private _defaultLanguageFirstLevelKeys;
-    private _props;
-    private _availableLanguages?;
-    [key: string]: any;
-    /**
-     * Constructor used to provide the strings objects in various language and the optional callback to get
-     * the interface language
-     * @param props - the strings object
-     * @param options - configuration options
-     */
-    constructor(props: LocalizedStringsProps, options?: LocalizedStringsOptions | (() => string));
-    /**
-     * Set the strings objects based on the parameter passed in the constructor
-     */
+export interface LocalizedStringsMethods {
     setContent(props: LocalizedStringsProps): void;
-    /**
-     * Replace all strings to pseudo value
-     */
-    private _pseudoAllValues;
-    /**
-     * Can be used from outside the class to force a particular language
-     * independently from the interface one
-     */
     setLanguage(language: string): void;
-    /**
-     * Load fallback values for missing translations
-     */
-    private _fallbackValues;
     getLanguage(): string;
     getInterfaceLanguage(): string;
     getAvailableLanguages(): string[];
@@ -49,4 +19,11 @@ export default class LocalizedStrings {
     getString(key: string, language?: string | null, omitWarning?: boolean): string | null;
     getContent(): LocalizedStringsProps;
 }
-export {};
+export type LocalizedStrings<T = Record<string, any>> = LocalizedStringsMethods & T;
+interface LocalizedStringsFactory {
+    new <T extends Record<string, any>>(props: {
+        [language: string]: T;
+    }, options?: LocalizedStringsOptions | (() => string)): LocalizedStrings<T>;
+}
+declare const LocalizedStrings: LocalizedStringsFactory;
+export default LocalizedStrings;

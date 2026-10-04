@@ -5,20 +5,20 @@ const placeholderReplaceRegex = /(\{[\d|\w]+\})/;
 const placeholderReferenceRegex = /(\$ref\{[\w|.]+\})/;
 
 // Define interfaces for props and options
-interface LocalizedStringsProps {
+export interface LocalizedStringsProps {
   [language: string]: {
     [key: string]: any;
   };
 }
 
-interface LocalizedStringsOptions {
+export interface LocalizedStringsOptions {
   customLanguageInterface?: () => string;
   pseudo?: boolean;
   pseudoMultipleLanguages?: boolean;
   logsEnabled?: boolean;
 }
 
-export default class LocalizedStrings {
+class LocalizedStringsImpl {
   private _opts: Required<LocalizedStringsOptions>;
   private _interfaceLanguage: string;
   private _language: string;
@@ -243,3 +243,33 @@ export default class LocalizedStrings {
     return this._props;
   }
 }
+
+// ---- Public typings -------------------------------------------------------
+// `LocalizedStringsMethods` describes the instance methods, while
+// `LocalizedStrings<T>` intersects them with the shape of a single language's
+// strings. This allows `new LocalizedStrings<MyStrings>({ en })` to expose the
+// `MyStrings` keys in a type-safe way.
+
+export interface LocalizedStringsMethods {
+  setContent(props: LocalizedStringsProps): void;
+  setLanguage(language: string): void;
+  getLanguage(): string;
+  getInterfaceLanguage(): string;
+  getAvailableLanguages(): string[];
+  formatString(str: string, ...valuesForPlaceholders: any[]): string | any[];
+  getString(key: string, language?: string | null, omitWarning?: boolean): string | null;
+  getContent(): LocalizedStringsProps;
+}
+
+export type LocalizedStrings<T = Record<string, any>> = LocalizedStringsMethods & T;
+
+interface LocalizedStringsFactory {
+  new <T extends Record<string, any>>(
+    props: { [language: string]: T },
+    options?: LocalizedStringsOptions | (() => string)
+  ): LocalizedStrings<T>;
+}
+
+const LocalizedStrings = LocalizedStringsImpl as unknown as LocalizedStringsFactory;
+
+export default LocalizedStrings;

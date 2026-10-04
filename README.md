@@ -308,36 +308,64 @@ _onSetLanguageToItalian() {
 }
 ```
 
-## Typescript support
+## TypeScript support
 
-Because of the dynamically generated class properties, it's a little tricky to
-have the autocomplete functionality working.
+Because the localized strings are generated dynamically at runtime, they aren't
+part of the class declaration. To get autocomplete and type checking you can pass
+the shape of your strings as a type argument to the constructor:
 
-Anyway it's possible to gain the desired results by:
+```ts
+import LocalizedStrings from "localized-strings";
 
-1. defining an Interface that extends the LocalizedStringsMethods interface and
-   has all the object string's keys
-2. defining that the LocalizedStrings instance implements that interface
-
-This is the suggested solution to work with Typescript:
-
-```js
-export interface IStrings extends LocalizedStringsMethods{
-    score:string;
-    time: String;
+interface IStrings {
+  score: string;
+  time: string;
 }
 
-public strings: IStrings;
-this.strings = new LocalizedStrings({
-            it: {
-                score: "Punti",
-                time: "Tempo"
-            },
-            en: {
-                score: "Score",
-                time: "Time"
-            }
-        });
+const strings = new LocalizedStrings<IStrings>({
+  it: {
+    score: "Punti",
+    time: "Tempo",
+  },
+  en: {
+    score: "Score",
+    time: "Time",
+  },
+});
+
+strings.score; // string
+strings.getLanguage(); // string, all library methods are still available
+```
+
+`IStrings` describes the strings of a single language; the constructor accepts an
+object that maps each language code to that same shape. The type argument can
+also be inferred from the passed object, but making it explicit is recommended so
+that missing or misspelled keys are reported.
+
+If you prefer not to use a type argument (for example because you need to
+annotate a variable whose value is created elsewhere), you can define an
+interface that extends `LocalizedStringsMethods` and use it as the type of the
+instance:
+
+```ts
+import LocalizedStrings, { LocalizedStringsMethods } from "localized-strings";
+
+export interface IStrings extends LocalizedStringsMethods {
+  score: string;
+  time: string;
+}
+
+let strings: IStrings;
+strings = new LocalizedStrings({
+  it: {
+    score: "Punti",
+    time: "Tempo",
+  },
+  en: {
+    score: "Score",
+    time: "Time",
+  },
+});
 ```
 
 ## Questions or suggestions?
